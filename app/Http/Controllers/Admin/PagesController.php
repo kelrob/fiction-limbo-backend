@@ -62,6 +62,16 @@ class PagesController extends Controller
         return view('admin.pages.story');
     }
 
+    public function addStory()
+    {
+        return view('admin.pages.add-story');
+    }
+
+    public function storyMedia()
+    {
+        return view('admin.pages.story-media');
+    }
+
     public function storyArchived()
     {
         return view('admin.pages.story-archived');

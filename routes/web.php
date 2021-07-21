@@ -35,6 +35,8 @@ Route::get('series-deleted', 'Admin\PagesController@seriesDeleted')->name('serie
 
 // Story
 Route::get('story', 'Admin\PagesController@story')->name('story');
+Route::get('add-story', 'Admin\PagesController@addStory')->name('add-story');
+Route::get('story-media', 'Admin\PagesController@storyMedia')->name('story-media');
 Route::get('story-archived', 'Admin\PagesController@storyArchived')->name('story-archived');
 Route::get('story-deleted', 'Admin\PagesController@storyDeleted')->name('story-deleted');
 

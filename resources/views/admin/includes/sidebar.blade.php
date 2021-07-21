@@ -32,7 +32,7 @@
         </li>
 
         <li><a href={{ url('story') }}
-                class={{ Route::is('story') || Route::is('story-archived') || Route::is('story-deleted') ? 'active' : '' }}><svg
+                class={{ Route::is('story') || Route::is('story-archived') || Route::is('story-deleted') || Route::is('add-story') || Route::is('story-media') ? 'active' : '' }}><svg
                     xmlns="http://www.w3.org/2000/svg" width="25" height="22.5" viewBox="0 0 25 22.5">
                     <path
                         d="M2,4.241A1.25,1.25,0,0,1,3.24,3H25.76A1.241,1.241,0,0,1,27,4.241V24.259A1.25,1.25,0,0,1,25.76,25.5H3.24A1.241,1.241,0,0,1,2,24.259ZM14.5,5.5V23h10V5.5ZM15.75,8h7.5v2.5h-7.5Zm0,3.75h7.5v2.5h-7.5Z"

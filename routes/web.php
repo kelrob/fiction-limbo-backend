@@ -14,8 +14,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-// Dashboard Admin
+// Authentication
+Auth::routes();
 Route::get('/', 'Admin\PublicController@index');
+
+// Admin
 Route::get('/dashboard', 'Admin\PagesController@dashboard')->name('dashboard');
 
 // Featured Post

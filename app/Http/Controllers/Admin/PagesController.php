@@ -7,6 +7,13 @@ use Illuminate\Http\Request;
 
 class PagesController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('role:admin');
+    }
+
     public function dashboard()
     {
         return view('admin.pages.dashboard');

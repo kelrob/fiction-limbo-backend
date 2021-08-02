@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
+    'App\\Http\\Controllers\\Admin\\LoginController' => $baseDir . '/app/Http/Controllers/Admin/LoginController.php',
     'App\\Http\\Controllers\\Admin\\PagesController' => $baseDir . '/app/Http/Controllers/Admin/PagesController.php',
     'App\\Http\\Controllers\\Admin\\PublicController' => $baseDir . '/app/Http/Controllers/Admin/PublicController.php',
     'App\\Http\\Controllers\\Auth\\ConfirmPasswordController' => $baseDir . '/app/Http/Controllers/Auth/ConfirmPasswordController.php',
@@ -21,6 +22,7 @@ return array(
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',
     'App\\Http\\Middleware\\Authenticate' => $baseDir . '/app/Http/Middleware/Authenticate.php',
     'App\\Http\\Middleware\\CheckForMaintenanceMode' => $baseDir . '/app/Http/Middleware/CheckForMaintenanceMode.php',
+    'App\\Http\\Middleware\\CheckRole' => $baseDir . '/app/Http/Middleware/CheckRole.php',
     'App\\Http\\Middleware\\EncryptCookies' => $baseDir . '/app/Http/Middleware/EncryptCookies.php',
     'App\\Http\\Middleware\\RedirectIfAuthenticated' => $baseDir . '/app/Http/Middleware/RedirectIfAuthenticated.php',
     'App\\Http\\Middleware\\TrimStrings' => $baseDir . '/app/Http/Middleware/TrimStrings.php',
@@ -3533,6 +3535,7 @@ return array(
     'Ramsey\\Uuid\\UuidInterface' => $vendorDir . '/ramsey/uuid/src/UuidInterface.php',
     'Ramsey\\Uuid\\Validator\\GenericValidator' => $vendorDir . '/ramsey/uuid/src/Validator/GenericValidator.php',
     'Ramsey\\Uuid\\Validator\\ValidatorInterface' => $vendorDir . '/ramsey/uuid/src/Validator/ValidatorInterface.php',
+    'RoleUserTableSeeder' => $baseDir . '/database/seeds/RoleUserTableSeeder.php',
     'RolesTableSeeder' => $baseDir . '/database/seeds/RolesTableSeeder.php',
     'SebastianBergmann\\CliParser\\AmbiguousOptionException' => $vendorDir . '/sebastian/cli-parser/src/exceptions/AmbiguousOptionException.php',
     'SebastianBergmann\\CliParser\\Exception' => $vendorDir . '/sebastian/cli-parser/src/exceptions/Exception.php',

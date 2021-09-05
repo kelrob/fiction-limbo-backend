@@ -39,6 +39,15 @@
                         transform="translate(-2 -3)" fill="#cecece" />
                 </svg>Post page</a></li>
 
+        <li><a href={{ url('type') }}
+                class={{ Route::is('type') || Route::is('type-deleted') ? 'active' : '' }}><svg
+                    xmlns="http://www.w3.org/2000/svg" width="22.408" height="24.898" viewBox="0 0 22.408 24.898">
+                    <path id="Path_10435" data-name="Path 10435"
+                        d="M25.408,2C6.735,2,4.245,19.429,3,26.9H5.487q1.244-6.224,6.227-6.847c4.98-.622,8.714-4.98,9.959-8.714l-1.867-1.245,1.245-1.245C22.3,7.6,23.546,5.735,25.408,2Z"
+                        transform="translate(-3 -2)" fill="#cecece" />
+                </svg>Type</a></li>
+
+
         <li><a href={{ url('gallery') }}
                 class={{ Route::is('gallery') || Route::is('gallery2') ? 'active' : '' }}><svg
                     xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25">
@@ -53,6 +62,14 @@
                         d="M3.25,3h22.5A1.25,1.25,0,0,1,27,4.25v20a1.25,1.25,0,0,1-1.25,1.25H3.25A1.25,1.25,0,0,1,2,24.25v-20A1.25,1.25,0,0,1,3.25,3ZM24.5,11.75H4.5V23h20Zm-18.75-5v2.5h2.5V6.75Zm5,0v2.5h2.5V6.75Z"
                         transform="translate(-2 -3)" fill="#cecece" />
                 </svg>Backgrounds</a></li>
+
+        <li><a class="active" href={{ url('notifications') }}><svg xmlns="http://www.w3.org/2000/svg" width="20.638"
+                    height="22.185" viewBox="0 0 20.638 22.185">
+                    <path id="Path_10433" data-name="Path 10433"
+                        d="M22.638,20.574H2V18.51H3.032V11.319a9.287,9.287,0,1,1,18.574,0V18.51h1.032Zm-12.9,1.032H14.9a2.58,2.58,0,1,1-5.159,0Z"
+                        transform="translate(-2 -2)" fill="#cecece" />
+                </svg>Notification</a></li>
+
 
         <li><a href={{ url('users') }}
                 class={{ Route::is('users') || Route::is('user-details') || Route::is('users-restricted') || Route::is('users-verified') ? 'active' : '' }}><svg
@@ -76,10 +93,15 @@
                         transform="translate(-1.998 -2.497)" fill="#cecece" />
                 </svg>Settings</a></li>
 
-        <li><a href={{ url('/') }}><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                    viewBox="0 0 20 20">
+        <li><a href={{ route('logout') }} onclick="event.preventDefault();
+            document.getElementById('logout-form').submit();"><svg xmlns="http://www.w3.org/2000/svg" width="20"
+                    height="20" viewBox="0 0 20 20">
                     <path d="M12,22A10,10,0,1,1,22,12,10,10,0,0,1,12,22ZM7,11V8L2,12l5,4V13h8V11Z"
                         transform="translate(-2 -2)" fill="#cecece" />
-                </svg>Logout</a></li>
+                </svg>Logout
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
+            </a></li>
     </ul>
 </nav>

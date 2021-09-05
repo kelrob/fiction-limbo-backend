@@ -30,8 +30,8 @@
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item active">
 
-                        @if (Request::url() != url('/'))
-                            <a class="nav-link" href="signin.html">Welcome, Admin</a>
+                        @if (Auth::check())
+                            <a class="nav-link" href="#">Welcome, {{ Auth::user()->username }}</a>
                         @endif
                     </li>
                 </ul>

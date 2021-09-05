@@ -26,6 +26,10 @@ Route::get('/featured-posts', 'Admin\PagesController@featuredPosts')->name('feat
 Route::get('/featured-post-draft', 'Admin\PagesController@featuredPostDraft')->name('featured-post-draft');
 Route::get('/featured-post-deleted', 'Admin\PagesController@featuredPostDeleted')->name('featured-post-deleted');
 
+// Type
+Route::get('type', 'Admin\PagesController@type')->name('type');
+Route::get('type-deleted', 'Admin\PagesController@typeDeleted')->name('type-deleted');
+
 // Genres
 Route::get('genres', 'Admin\PagesController@genres')->name('genres');
 Route::get('genres-archived', 'Admin\PagesController@genresArchived')->name('genres-archived');
@@ -49,6 +53,11 @@ Route::get('gallery2', 'Admin\PagesController@gallery2')->name('gallery2');
 
 // Backgrounds
 Route::get('backgrounds', 'Admin\PagesController@backgrounds')->name('backgrounds');
+
+// Notifications
+Route::get('notifications', 'Admin\PagesController@notifications')->name('notifications');
+Route::get('notification-draft', 'Admin\PagesController@notificationDeleted')->name('notification-draft');
+Route::get('notification-deleted', 'Admin\PagesController@notificationDeleted')->name('notification-deleted');
 
 // Users
 Route::get('users', 'Admin\PagesController@users')->name('users');

@@ -34,6 +34,16 @@ class PagesController extends Controller
         return view('admin.pages.featured-post-deleted');
     }
 
+    public function type()
+    {
+        return view('admin.pages.type');
+    }
+
+    public function typeDeleted()
+    {
+        return view('admin.pages.type-deleted');
+    }
+
     public function genres()
     {
         return view('admin.pages.genres');
@@ -102,6 +112,21 @@ class PagesController extends Controller
     public function backgrounds()
     {
         return view('admin.pages.backgrounds');
+    }
+
+    public function notifications()
+    {
+        return view('admin.pages.notifications');
+    }
+
+    public function notificationDraft()
+    {
+        return view('admin.pages.notification-draft');
+    }
+
+    public function notificationDeleted()
+    {
+        return view('admin.pages.notifications');
     }
 
     public function users()

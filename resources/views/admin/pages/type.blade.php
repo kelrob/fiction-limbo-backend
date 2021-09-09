@@ -14,14 +14,17 @@
                         <div class="admin-head">
                             <div class="row">
                                 <div class="col-lg-6" align="right">
-                                    <h2><span><a class="active-inner" href={{ url('type') }}>All (4)</a></span> | <span><a
-                                                href={{ url('type-deleted') }}>Deleted (2)</a></span></h2>
+                                    <h2><span><a class="active-inner" href={{ url('type') }}>All
+                                                ({{ $typesCount }})</a></span> |
+                                        <span><a href={{ url('type-deleted') }}>Deleted (2)</a></span>
+                                    </h2>
                                 </div>
                                 <div class="col-lg-5">
                                     <form class="search-f-box">
                                         <div class="row">
                                             <div class="col">
-                                                <input type="text" class="form-control" id="" placeholder="Search by Type">
+                                                <input type="text" class="form-control" id=""
+                                                    placeholder="Search by Type">
                                             </div>
                                             <div class="col-auto">
                                                 <img class="search-icon img-fluid" src="../img/icons/search-icon.svg">
@@ -37,67 +40,28 @@
                                     <tr>
                                         <th class="numbering" scope="col"></th>
                                         <th scope="col">Type</th>
-                                        <th scope="col"></th>
+                                        <th scope="col">Author</th>
                                         <th scope="col"></th>
                                     </tr>
                                 </thead>
                                 <tbody id="myTable">
-                                    <tr>
-                                        <td scope="row"></td>
-                                        <td><span><a href="#">Stories</a></span></td>
-                                        <td width="50%"></td>
-                                        <td>
-                                            <div class="table-action">
-                                                <a href="#" data-toggle="modal" data-target="#editModal"><img
-                                                        src="../img/icons/admin/admin-edit.svg"></a>
-                                                <a href="#" data-toggle="modal" data-target="#deleteModal"><img
-                                                        src="../img/icons/admin/admin-del.svg"></a>
-                                            </div>
-                                        </td>
+                                    @foreach ($types as $type)
+                                        <tr>
+                                            <td scope="row"></td>
+                                            <td><span><a href="#">{{ ucfirst($type->name) }}</a></span></td>
+                                            <td width="50%">
+                                                {{ ucfirst($type->user->firstname . ' ' . $type->user->lastname) }}</td>
+                                            <td>
+                                                <div class="table-action">
+                                                    <a href="#" data-toggle="modal" data-target="#editModal"><img
+                                                            src="../img/icons/admin/admin-edit.svg"></a>
+                                                    <a href="#" data-toggle="modal" data-target="#deleteModal"><img
+                                                            src="../img/icons/admin/admin-del.svg"></a>
+                                                </div>
+                                            </td>
 
-                                    </tr>
-                                    <tr>
-                                        <td scope="row"></td>
-                                        <td><span><a href="#">Poems</a></span></td>
-                                        <td width="50%"></td>
-                                        <td>
-                                            <div class="table-action">
-                                                <a href="#" data-toggle="modal" data-target="#editModal"><img
-                                                        src="../img/icons/admin/admin-edit.svg"></a>
-                                                <a href="#" data-toggle="modal" data-target="#deleteModal"><img
-                                                        src="../img/icons/admin/admin-del.svg"></a>
-                                            </div>
-                                        </td>
-
-                                    </tr>
-                                    <tr>
-                                        <td scope="row"></td>
-                                        <td><span><a href="#">Audio Tales</a></span></td>
-                                        <td width="50%"></td>
-                                        <td>
-                                            <div class="table-action">
-                                                <a href="#" data-toggle="modal" data-target="#editModal"><img
-                                                        src="../img/icons/admin/admin-edit.svg"></a>
-                                                <a href="#" data-toggle="modal" data-target="#deleteModal"><img
-                                                        src="../img/icons/admin/admin-del.svg"></a>
-                                            </div>
-                                        </td>
-
-                                    </tr>
-                                    <tr>
-                                        <td scope="row"></td>
-                                        <td><span><a href="#">Series</a></span></td>
-                                        <td width="50%"></td>
-                                        <td>
-                                            <div class="table-action">
-                                                <a href="#" data-toggle="modal" data-target="#editModal"><img
-                                                        src="../img/icons/admin/admin-edit.svg"></a>
-                                                <a href="#" data-toggle="modal" data-target="#deleteModal"><img
-                                                        src="../img/icons/admin/admin-del.svg"></a>
-                                            </div>
-                                        </td>
-
-                                    </tr>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -133,7 +97,7 @@
 
                     <!--Button Add New Series-->
 
-                    <div class="">
+                    <div class="___class_+?38___">
                         <div class="col-lg-3 offset-4">
                             <a href="#" data-toggle="modal" data-target="#typeModal"><button
                                     class="btn btn-warning new-story-btn">Add new type</button></a>
@@ -164,13 +128,12 @@
 
                                     <label for="exampleInputEmail1">Name</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="exampleInputEmail1"
+                                        <input type="text" class="form-control" name="type" id="type"
                                             aria-describedby="emailHelp">
                                     </div>
 
-                                    <a href="#"></a><button class="btn btn-warning next-btn" type="button"
+                                    <button class="btn btn-warning next-btn" type="button" onclick="setTypeToAdd()"
                                         id="typepositive">Create Type</button>
-
 
                                 </form>
                             </div>
@@ -226,15 +189,17 @@
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row">
+                            <div class="alert alert-success col-lg-12 alert-dismissible fade show" id="success-message"
+                                style="display: none;"></div>
+                            <div class="alert alert-danger col-lg-12 alert-dismissible fade show" id="error-message"
+                                style="display: none;"></div>
                             <div class="col-md-8 offset-2">
                                 <div class="confirmation-text">Are You Sure?</div>
                             </div>
                             <div class="col-md-8 offset-3">
-
-                                <a href={{ url('type') }}><button class="confirmation-yes">Yes</button></a>
+                                <button class="confirmation-yes" id="yes-btn" onclick="addType()"><span
+                                        id="submit-loader">Yes</span></button>
                                 <button class="confirmation-no" id="typeShow">Cancel</button>
-
-
                             </div>
                         </div>
                     </div>
@@ -271,6 +236,44 @@
     </div>
 
 
+    <script>
+        const setTypeToAdd = () => {
+            let type = $('#type').val();
+            localStorage.setItem('type', type);
+        }
+
+        const addType = () => {
+            let name = localStorage.getItem('type');
+            let _token = $('meta[name="csrf-token"]').attr('content');
+
+            $('#submit-loader').html("Please wait <i class='fa fa-spinner fa-spin'></i>");
+            $('#yes-btn').attr('disabled', 'disabled');
+
+
+            $.ajax({
+                url: "/add-type",
+                type: "POST",
+                data: {
+                    name,
+                    _token
+                },
+                success: function(response) {
+                    if (response.error === false) {
+                        $('#success-message').text(response.message).show();
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    } else if (response.error === true) {
+                        $('#error-message').text(response.message).show();
+                        $('#submit-loader').html("Yes");
+                        $('#yes-btn').removeAttr('disabled');
+                    }
+                    localStorage.removeItem('type');
+                },
+            });
+        }
+    </script>
+
     <!-- Modal within a Modal Tweak -->
     <script>
         $("#typepositive").click(function() {
@@ -304,17 +307,17 @@
 
 
     <script>
-        const showSubMenu = () => {
-            let icon = '<i class="fa fa-chevron-up"></i>'
-            $('#toggle-submenu').html(icon).attr('onclick', 'hideSubMenu()');
-            $('#subMenuItem').slideDown();
-        }
+        // const showSubMenu = () => {
+        //     let icon = '<i class="fa fa-chevron-up"></i>'
+        //     $('#toggle-submenu').html(icon).attr('onclick', 'hideSubMenu()');
+        //     $('#subMenuItem').slideDown();
+        // }
 
-        const hideSubMenu = () => {
-            let icon = '<i class="fa fa-chevron-right"></i>'
-            $('#toggle-submenu').html(icon).attr('onclick', 'showSubMenu()');
-            $('#subMenuItem').slideUp();
-        }
+        // const hideSubMenu = () => {
+        //     let icon = '<i class="fa fa-chevron-right"></i>'
+        //     $('#toggle-submenu').html(icon).attr('onclick', 'showSubMenu()');
+        //     $('#subMenuItem').slideUp();
+        // }
     </script>
 
 @endsection

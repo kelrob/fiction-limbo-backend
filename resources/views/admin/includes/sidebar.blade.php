@@ -1,6 +1,6 @@
 <nav id="sidebar" class="overflow-auto vh-100">
     <ul class="list-unstyled side-ul components vh-100">
-        <li class="">
+        <li class="___class_+?2___">
             <a href="#" class={{ Route::is('dashboard') ? 'active' : '' }} data-toggle="" aria-expanded="true">
                 <span onclick="location.href='dashboard';">
                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25">
@@ -15,7 +15,7 @@
                         class="fa fa-chevron-right"></i></span>
             </a>
             <ul class="list-unstyled submenu" id="subMenuItem" style="display: none">
-                <li class="">
+                <li class="___class_+?6___">
                     <a href={{ url('featured-posts') }}
                         class={{ Route::is('featured-posts') || Route::is('featured-post-draft') || Route::is('featured-post-deleted') ? 'active' : '' }}>Featured
                         Post</a>
@@ -63,8 +63,9 @@
                         transform="translate(-2 -3)" fill="#cecece" />
                 </svg>Backgrounds</a></li>
 
-        <li><a class="active" href={{ url('notifications') }}><svg xmlns="http://www.w3.org/2000/svg" width="20.638"
-                    height="22.185" viewBox="0 0 20.638 22.185">
+        <li><a href={{ url('notifications') }}
+                class={{ Route::is('notifications') || Route::is('notification-draft') || Route::is('notification-deleted') ? 'active' : '' }}><svg
+                    xmlns="http://www.w3.org/2000/svg" width="20.638" height="22.185" viewBox="0 0 20.638 22.185">
                     <path id="Path_10433" data-name="Path 10433"
                         d="M22.638,20.574H2V18.51H3.032V11.319a9.287,9.287,0,1,1,18.574,0V18.51h1.032Zm-12.9,1.032H14.9a2.58,2.58,0,1,1-5.159,0Z"
                         transform="translate(-2 -2)" fill="#cecece" />

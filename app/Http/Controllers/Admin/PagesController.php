@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\PostType;
 use Illuminate\Http\Request;
 
 class PagesController extends Controller
@@ -36,7 +37,9 @@ class PagesController extends Controller
 
     public function type()
     {
-        return view('admin.pages.type');
+        $types = PostType::with('user')->orderBy('created_at')->get();
+        $typesCount = count($types);
+        return view('admin.pages.type', compact('types', 'typesCount'));
     }
 
     public function typeDeleted()

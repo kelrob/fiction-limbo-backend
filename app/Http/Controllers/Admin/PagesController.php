@@ -37,7 +37,7 @@ class PagesController extends Controller
 
     public function type()
     {
-        $types = PostType::with('user')->orderBy('created_at')->get();
+        $types = PostType::with('user')->orderBy('created_at', 'DESC')->get();
         $typesCount = count($types);
         return view('admin.pages.type', compact('types', 'typesCount'));
     }

@@ -54,4 +54,77 @@ class TypeController extends Controller
             ]);
         }
     }
+
+    public function updateType(Request $request)
+    {
+
+        // Make sure name is passed
+        if (!$request->name || !$request->id) {
+            return response()->json([
+                'error' => true,
+                'message' => 'All Fields are required',
+            ]);
+        }
+
+        // Check if type Exist
+        $type = PostType::where('id', $request->id)->first();
+        if (!$type) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Type not found',
+            ]);
+        }
+
+
+        // Update the name
+        $type->name = $request->name;
+        $updateType = $type->save();
+
+        if ($updateType) {
+            return response()->json([
+                'error' => false,
+                'message' => 'Type Updated successfully',
+            ]);
+        } else {
+            return response()->json([
+                'error' => true,
+                'message' => 'There was an error making this request'
+            ]);
+        }
+    }
+
+    public function deleteType(Request $request)
+    {
+
+        // Make sure name is passed
+        if (!$request->id) {
+            return response()->json([
+                'error' => true,
+                'message' => 'All Fields are required',
+            ]);
+        }
+
+        // Check if type Exist
+        $type = PostType::where('id', $request->id)->first();
+        if (!$type) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Type not found',
+            ]);
+        }
+
+
+        // Delete the type
+        if ($type->delete()) {
+            return response()->json([
+                'error' => false,
+                'message' => 'Type Deleted successfully',
+            ]);
+        } else {
+            return response()->json([
+                'error' => true,
+                'message' => 'There was an error making this request'
+            ]);
+        }
+    }
 }

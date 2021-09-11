@@ -30,6 +30,8 @@ Route::get('/featured-post-deleted', 'Admin\PagesController@featuredPostDeleted'
 Route::get('type', 'Admin\PagesController@type')->name('type');
 Route::get('type-deleted', 'Admin\PagesController@typeDeleted')->name('type-deleted');
 Route::post('add-type', 'Admin\TypeController@addType');
+Route::post('update-type', 'Admin\TypeController@updateType');
+Route::delete('delete-type', 'Admin\TypeController@deleteType');
 
 // Genres
 Route::get('genres', 'Admin\PagesController@genres')->name('genres');

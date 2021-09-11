@@ -53,9 +53,12 @@
                                                 {{ ucfirst($type->user->firstname . ' ' . $type->user->lastname) }}</td>
                                             <td>
                                                 <div class="table-action">
-                                                    <a href="#" data-toggle="modal" data-target="#editModal"><img
+                                                    <a href="#" data-toggle="modal" data-target="#editModal"
+                                                        onclick='setTypeToEdit({{ "'$type->name'" . ',' . "'$type->id'" }})'><img
                                                             src="../img/icons/admin/admin-edit.svg"></a>
-                                                    <a href="#" data-toggle="modal" data-target="#deleteModal"><img
+
+                                                    <a href="#" onclick="setIdToDelete({{ $type->id }})"
+                                                        data-toggle="modal" data-target="#deleteModal"><img
                                                             src="../img/icons/admin/admin-del.svg"></a>
                                                 </div>
                                             </td>
@@ -160,17 +163,19 @@
                         <div class="row">
                             <div class="col-md-8 offset-2">
                                 <form class="admin-form">
-
+                                    <div class="alert alert-success col-lg-12 alert-dismissible fade show"
+                                        id="success-message" style="display: none;"></div>
+                                    <div class="alert alert-danger col-lg-12 alert-dismissible fade show" id="error-message"
+                                        style="display: none;"></div>
                                     <label for="exampleInputEmail1">Name</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="exampleInputEmail1"
+                                        <input type="text" class="form-control" id="typeNameToEdit"
                                             aria-describedby="emailHelp">
+                                        <input type="hidden" id="idToEdit" />
                                     </div>
 
-                                    <a href="#"></a><button class="btn btn-warning next-btn" type="button"
-                                        id="typepositive">Update Type</button>
-
-
+                                    <button class="btn btn-warning next-btn" type="button" id="update-loader"
+                                        onclick="updateType()">Update Type</button>
                                 </form>
                             </div>
                         </div>
@@ -218,12 +223,17 @@
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row">
+                            <div class="alert alert-success col-lg-12 alert-dismissible fade show"
+                                id="delete-success-message" style="display: none;"></div>
+                            <div class="alert alert-danger col-lg-12 alert-dismissible fade show" id="delete-error-message"
+                                style="display: none;"></div>
                             <div class="col-md-8 offset-2">
                                 <div class="confirmation-text">Are You Sure?</div>
                             </div>
                             <div class="col-md-8 offset-3">
 
-                                <a href={{ url('type') }}><button class="confirmation-yes">Yes</button></a>
+                                <button class="confirmation-yes" id="delete-submit-loader"
+                                    onclick="deleteType()">Yes</button></a>
                                 <button class="confirmation-no" data-dismiss="modal">Cancel</button>
 
 
@@ -249,8 +259,8 @@
             $('#submit-loader').html("Please wait <i class='fa fa-spinner fa-spin'></i>");
             $('#yes-btn').attr('disabled', 'disabled');
 
-
             $.ajax({
+
                 url: "/add-type",
                 type: "POST",
                 data: {
@@ -269,6 +279,77 @@
                         $('#yes-btn').removeAttr('disabled');
                     }
                     localStorage.removeItem('type');
+                },
+            });
+        }
+
+        const setTypeToEdit = (typeName, id) => {
+            $('#typeNameToEdit').val(typeName);
+            $('#idToEdit').val(id);
+        }
+
+        const updateType = () => {
+            let _token = $('meta[name="csrf-token"]').attr('content');
+            let name = $('#typeNameToEdit').val();
+            let id = $('#idToEdit').val();
+
+            $('#update-loader').html("Please wait <i class='fa fa-spinner fa-spin'></i>").attr('disabled', 'disabled');
+
+
+            $.ajax({
+                url: "/update-type",
+                type: "POST",
+                data: {
+                    id,
+                    name,
+                    _token
+                },
+
+                success: function(response) {
+                    console.log(response);
+                    if (response.error === false) {
+                        $('#success-message').text(response.message).show();
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    } else if (response.error === true) {
+                        $('#error-message').text(response.message).show();
+                        $('#update-loader').html("Yes").removeAttr('disabled');
+                    }
+                },
+            });
+        }
+
+        const setIdToDelete = (id) => {
+            localStorage.setItem('id', id);
+        }
+
+        const deleteType = () => {
+            let id = localStorage.getItem('id');
+            let _token = $('meta[name="csrf-token"]').attr('content');
+
+            $('#delete-submit-loader').html("Please wait <i class='fa fa-spinner fa-spin'></i>").attr('disabled',
+                'disabled');
+            $.ajax({
+
+                url: "/delete-type",
+                type: "DELETE",
+                data: {
+                    id,
+                    _token
+                },
+                success: function(response) {
+                    if (response.error === false) {
+                        $('#delete-success-message').text(response.message).show();
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    } else if (response.error === true) {
+                        $('#delete-error-message').text(response.message).show();
+                        $('#delete-submit-loader').html("Yes");
+                        $('#delete-yes-btn').removeAttr('disabled');
+                    }
+                    localStorage.removeItem('id');
                 },
             });
         }

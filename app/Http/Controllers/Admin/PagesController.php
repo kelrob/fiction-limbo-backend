@@ -37,14 +37,20 @@ class PagesController extends Controller
 
     public function type()
     {
-        $types = PostType::with('user')->orderBy('created_at', 'DESC')->get();
+        $types = PostType::where('is_deleted', false)->with('user')->orderBy('created_at', 'DESC')->get();
+        $deletedTypes = PostType::where('is_deleted', true)->with('user')->orderBy('created_at', 'DESC')->get();
         $typesCount = count($types);
-        return view('admin.pages.type', compact('types', 'typesCount'));
+        $deletedCount = count($deletedTypes);
+        return view('admin.pages.type', compact('types', 'typesCount', 'deletedCount'));
     }
 
     public function typeDeleted()
     {
-        return view('admin.pages.type-deleted');
+        $types = PostType::where('is_deleted', false)->with('user')->orderBy('created_at', 'DESC')->get();
+        $deletedTypes = PostType::where('is_deleted', true)->with('user')->orderBy('created_at', 'DESC')->get();
+        $typesCount = count($types);
+        $deletedCount = count($deletedTypes);
+        return view('admin.pages.type-deleted', compact('deletedTypes', 'typesCount', 'deletedCount'));
     }
 
     public function genres()

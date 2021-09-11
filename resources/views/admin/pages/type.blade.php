@@ -16,7 +16,7 @@
                                 <div class="col-lg-6" align="right">
                                     <h2><span><a class="active-inner" href={{ url('type') }}>All
                                                 ({{ $typesCount }})</a></span> |
-                                        <span><a href={{ url('type-deleted') }}>Deleted (2)</a></span>
+                                        <span><a href={{ url('type-deleted') }}>Deleted ({{ $deletedCount }})</a></span>
                                     </h2>
                                 </div>
                                 <div class="col-lg-5">

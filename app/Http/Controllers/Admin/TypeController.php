@@ -115,10 +115,50 @@ class TypeController extends Controller
 
 
         // Delete the type
-        if ($type->delete()) {
+        $type->is_deleted = true;
+        $deleteType = $type->save();
+
+        if ($deleteType) {
             return response()->json([
                 'error' => false,
                 'message' => 'Type Deleted successfully',
+            ]);
+        } else {
+            return response()->json([
+                'error' => true,
+                'message' => 'There was an error making this request'
+            ]);
+        }
+    }
+
+    public function restoreType(Request $request)
+    {
+        // Make sure name is passed
+        if (!$request->id) {
+            return response()->json([
+                'error' => true,
+                'message' => 'All Fields are required',
+            ]);
+        }
+
+        // Check if type Exist
+        $type = PostType::where('id', $request->id)->first();
+        if (!$type) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Type not found',
+            ]);
+        }
+
+
+        // Delete the type
+        $type->is_deleted = false;
+        $deleteType = $type->save();
+
+        if ($deleteType) {
+            return response()->json([
+                'error' => false,
+                'message' => 'Type Restored successfully',
             ]);
         } else {
             return response()->json([

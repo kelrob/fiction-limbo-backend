@@ -32,6 +32,7 @@ Route::get('type-deleted', 'Admin\PagesController@typeDeleted')->name('type-dele
 Route::post('add-type', 'Admin\TypeController@addType');
 Route::post('update-type', 'Admin\TypeController@updateType');
 Route::delete('delete-type', 'Admin\TypeController@deleteType');
+Route::post('restore-type', 'Admin\TypeController@restoreType');
 
 // Genres
 Route::get('genres', 'Admin\PagesController@genres')->name('genres');

@@ -13,14 +13,17 @@
                         <div class="admin-head">
                             <div class="row">
                                 <div class="col-lg-6" align="right">
-                                    <h2><span><a href="type.html">All (4)</a></span> | <span><a class="active-inner"
-                                                href="type-deleted.html">Deleted (2)</a></span></h2>
+                                    <h2><span><a href="{{ url('type') }}">All ({{ $typesCount }})</a></span> |
+                                        <span><a class="active-inner" href="{{ url('type-deleted') }}">Deleted
+                                                ({{ $deletedCount }})</a></span>
+                                    </h2>
                                 </div>
                                 <div class="col-lg-5">
                                     <form class="search-f-box">
                                         <div class="row">
                                             <div class="col">
-                                                <input type="text" class="form-control" id="" placeholder="Search by Type">
+                                                <input type="text" class="form-control" id=""
+                                                    placeholder="Search by Type">
                                             </div>
                                             <div class="col-auto">
                                                 <img class="search-icon img-fluid" src="../img/icons/search-icon.svg">
@@ -42,28 +45,20 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td scope="row">1</td>
-                                        <td><span><a href="#">Book Review</a></span></td>
-                                        <td width="50%"></td>
-                                        <td>
-                                            <div class="table-action">
-                                                <a href="#" data-toggle="modal" data-target="#restoreModal"><img
-                                                        src="../img/icons/admin/admin-restore.svg"></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">2</td>
-                                        <td><span><a href="#">Spoken Word</a></span></td>
-                                        <td width="50%"></td>
-                                        <td>
-                                            <div class="table-action">
-                                                <a href="#" data-toggle="modal" data-target="#restoreModal"><img
-                                                        src="../img/icons/admin/admin-restore.svg"></a>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    @foreach ($deletedTypes as $type)
+                                        <tr>
+                                            <td scope="row">{{ $loop->iteration }}</td>
+                                            <td><span><a href="#">{{ ucfirst($type->name) }}</a></span></td>
+                                            <td width="50%"></td>
+                                            <td>
+                                                <div class="table-action">
+                                                    <a href="#" data-toggle="modal" data-target="#restoreModal"
+                                                        onclick="setTypeToRestore({{ $type->id }})"><img
+                                                            src="../img/icons/admin/admin-restore.svg"></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
 
                                 </tbody>
                             </table>
@@ -112,12 +107,16 @@
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row">
+                            <div class="alert alert-success col-lg-12 alert-dismissible fade show" id="success-message"
+                                style="display: none;"></div>
+                            <div class="alert alert-danger col-lg-12 alert-dismissible fade show" id="error-message"
+                                style="display: none;"></div>
                             <div class="col-md-8 offset-2">
                                 <div class="confirmation-text">Are You Sure?</div>
                             </div>
                             <div class="col-md-8 offset-3">
 
-                                <a href="type.html"><button class="confirmation-yes">Yes</button></a>
+                                <button class="confirmation-yes" id="submit-loader" onclick="restoreType()">Yes</button>
                                 <button class="confirmation-no" data-dismiss="modal">Cancel</button>
 
 
@@ -129,6 +128,40 @@
         </div>
     </div>
 
+    <script>
+        const setTypeToRestore = (id) => {
+            localStorage.setItem('restoreId', id);
+        }
+
+        const restoreType = () => {
+            let id = localStorage.getItem('restoreId');
+            let _token = $('meta[name="csrf-token"]').attr('content');
+
+            $('#submit-loader').html("Please wait <i class='fa fa-spinner fa-spin'></i>").attr('disabled', 'disabled');
+
+            $.ajax({
+
+                url: "/restore-type",
+                type: "POST",
+                data: {
+                    id,
+                    _token
+                },
+                success: function(response) {
+                    if (response.error === false) {
+                        $('#success-message').text(response.message).show();
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    } else if (response.error === true) {
+                        $('#error-message').text(response.message).show();
+                        $('#submit-loader').html("Yes").removeAttr('disabled');
+                    }
+                    localStorage.removeItem('restoreId');
+                },
+            });
+        }
+    </script>
 
     <script>
         const showSubMenu = () => {

@@ -38,6 +38,9 @@ Route::post('restore-type', 'Admin\TypeController@restoreType');
 Route::get('genres', 'Admin\PagesController@genres')->name('genres');
 Route::get('genres-archived', 'Admin\PagesController@genresArchived')->name('genres-archived');
 Route::get('genres-deleted', 'Admin\PagesController@genresDeleted')->name('genres-deleted');
+Route::post('add-genre', 'Admin\GenreController@addGenre');
+Route::get('genre/edit/{id}', 'Admin\PagesController@editGenre');
+Route::post('update-genre', 'Admin\GenreController@updateGenre');
 
 // Series
 Route::get('series', 'Admin\PagesController@series')->name('series');

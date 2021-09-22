@@ -18,6 +18,10 @@ class CreateGenresTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->string('name');
             $table->boolean('is_active')->default(true);
+            $table->string('cover_image')->nullable();
+            $table->boolean('homepage_category')->nullable();
+            $table->boolean('search_page')->nullable();
+            $table->boolean('is_deleted')->nullable();
             $table->timestamps();
         });
     }

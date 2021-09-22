@@ -21,7 +21,8 @@
                                     <form class="search-f-box">
                                         <div class="row">
                                             <div class="col">
-                                                <input type="text" class="form-control" id="" placeholder="Search by title">
+                                                <input type="text" class="form-control" id=""
+                                                    placeholder="Search by title">
                                             </div>
                                             <div class="col-auto">
                                                 <img class="search-icon img-fluid" src="../img/icons/search-icon.svg">
@@ -91,8 +92,8 @@
                                             <div class="table-action">
                                                 <a href="#" data-toggle="modal" data-target="#seriesModal"><img
                                                         src="../img/icons/admin/admin-edit.svg"></a>
-                                                <input type="image" class="move up" width="18px" margin-top="10px" img
-                                                    src="../img/icons/admin/up.svg">
+                                                <input type="image" class="move up" width="18px" margin-top="10px"
+                                                    img src="../img/icons/admin/up.svg">
                                                 <input type="image" class="move down" width="18px" img
                                                     src="../img/icons/admin/down.svg">
                                                 <a href="#" data-toggle="modal" data-target="#archiveModal"><img
@@ -138,14 +139,14 @@
                     <!--Button Add New Series-->
 
                     <div class="">
-                        <div class="col-lg-3 offset-4">
-                            <a href="#" data-toggle="modal" data-target="#seriesModal"><button
-                                    class="btn btn-warning new-story-btn">Add new series</button></a>
-                        </div>
+                        <div class=" col-lg-3 offset-4">
+                        <a href="#" data-toggle="modal" data-target="#seriesModal"><button
+                                class="btn btn-warning new-story-btn">Add new series</button></a>
                     </div>
-
                 </div>
+
             </div>
+        </div>
         </div>
     </section>
 
@@ -164,7 +165,7 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-8 offset-2">
-                                <form class="admin-form">
+                                <form class="admin-form" method="POST" action="{{ url('add-series') }}">
 
                                     <label for="exampleInputEmail1">Title</label>
                                     <div class="input-group">

@@ -80,4 +80,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(PostType::class);
     }
+
+    public function genre()
+    {
+        return $this->hasMany(Genre::class);
+    }
 }

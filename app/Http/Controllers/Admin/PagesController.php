@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Genre;
 use App\Http\Controllers\Controller;
 use App\PostType;
 use Illuminate\Http\Request;
@@ -55,7 +56,15 @@ class PagesController extends Controller
 
     public function genres()
     {
-        return view('admin.pages.genres');
+        $genres = Genre::where('is_active', true)->with('user')->orderBy('created_at', 'DESC')->get();
+        $deletedGenres = Genre::where('is_deleted', true)->with('user')->orderBy('created_at', 'DESC')->get();
+        $archivedGenres = Genre::where('is_active', false)->with('user')->orderBy('created_at', 'DESC')->get();
+
+        $genresCount = count($genres);
+        $deletedCount = count($deletedGenres);
+        $archivedCount = count($archivedGenres);
+
+        return view('admin.pages.genres', compact('genres', 'genresCount', 'deletedCount', 'archivedCount'));
     }
 
     public function genresArchived()
@@ -66,6 +75,12 @@ class PagesController extends Controller
     public function genresDeleted()
     {
         return view('admin.pages.genres-deleted');
+    }
+
+    public function editGenre($id)
+    {
+        $genre = Genre::where('id', $id)->first();
+        return view('admin.pages.genres-edit', compact('genre', 'id'));
     }
 
     public function series()

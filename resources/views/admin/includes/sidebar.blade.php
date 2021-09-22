@@ -22,7 +22,7 @@
                 </li>
                 <li>
                     <a href={{ url('genres') }}
-                        class={{ Route::is('genres') || Route::is('genres-archived') || Route::is('genres-deleted') ? 'active' : '' }}>Genres</a>
+                        class={{ Route::is('genres') || Route::is('genres-edit') || Route::is('genres-archived') || Route::is('genres-deleted') ? 'active' : '' }}>Genres</a>
                 </li>
                 <li>
                     <a href={{ url('series') }}

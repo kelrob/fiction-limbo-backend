@@ -66,7 +66,7 @@
                         </p>
                     </div>
                     <div class="button-center">
-                        <form action="index.html" method="POST">
+                        <form action="{{ url('/') }}" method="POST">
                             <button type="submit">Get back to the ship</button>
                         </form>
                     </div>

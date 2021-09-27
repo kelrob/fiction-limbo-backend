@@ -17,6 +17,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script type="text/javascript">
+        tinymce.init({
+            selector: '#mytextarea',
+            height: "480"
+        });
+    </script>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 </head>
 </head>

@@ -145,7 +145,7 @@
                                             <p>Add as new search page genre</p>
                                             <label class="switch">
                                                 <input type="checkbox" {{ $genre->search_page == true ? 'checked' : '' }}
-                                                    name="homepage_category" name="search_page">
+                                                    name="search_page">
                                                 <span class="slider round"></span>
                                             </label>
                                         </div>

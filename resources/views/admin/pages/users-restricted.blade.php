@@ -13,10 +13,12 @@
                         <div class="admin-head">
                             <div class="row">
                                 <div class="col-lg-7" align="right">
-                                    <h2><span><a href={{ url('users') }}>All (493,442)</a></span> | <span><a
+                                    <h2><span><a href={{ url('users') }}>All
+                                                ({{ number_format($usersCount) }})</a></span> | <span><a
                                                 class="active-inner" href={{ url('users-restricted') }}>Restricted
-                                                (200)</a></span>
-                                        | <span><a href={{ url('users-verified') }}>Verified (400)</a></span></h2>
+                                                ({{ number_format($restrictedUsersCount) }})</a></span>
+                                        | <span><a href={{ url('users-verified') }}>Verified
+                                                ({{ $verifiedUsersCount }})</a></span></h2>
                                 </div>
                                 <div class="col-lg-5">
                                     <form class="search-f-box">
@@ -46,27 +48,18 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td scope="row">1</td>
-                                        <td><span><a href="user-details.html">Mark James</a></span></td>
-                                        <td>James234</td>
-                                        <td>markjames@gmail.com</td>
-                                        <td>11-04-2021</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">2</td>
-                                        <td><span><a href="user-details.html">Jacob Okwoho</a></span></td>
-                                        <td>Thornton</td>
-                                        <td>okwohoJ@gmail.com</td>
-                                        <td>15-06-2021</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">3</td>
-                                        <td><span><a href="user-details.html">Larry Walker</a></span></td>
-                                        <td>larrywalker2</td>
-                                        <td>larryw@gmail.com</td>
-                                        <td>19-09-2021</td>
-                                    </tr>
+                                    @foreach ($restrictedUsers as $user)
+                                        <tr>
+                                            <td scope="row">{{ $loop->iteration }}</td>
+                                            <td><span><a
+                                                        href={{ url('user-details') }}>{{ $user->firstname . ' ' . $user->lastname }}</a></span>
+                                            </td>
+                                            <td>{{ $user->username }}</td>
+                                            <td>{{ $user->email }}</td>
+                                            <td>{{ $user->created_at->format('d-m-Y') }}</td>
+                                        </tr>
+
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

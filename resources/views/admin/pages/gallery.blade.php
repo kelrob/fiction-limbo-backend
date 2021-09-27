@@ -15,12 +15,13 @@
                                 <div class="col-lg-4">
                                     <form class="select-media">
                                         <div class="">
-                                            <select class="form-control" id="exampleFormControlSelect1">
-                                                <option>All media</option>
-                                                <option>Images</option>
-                                                <option>Videos</option>
-                                                <option>Audios</option>
-                                                <option>Others</option>
+                                            <select class="
+                                            form-control" id="exampleFormControlSelect1">
+                                            <option>All media</option>
+                                            <option>Images</option>
+                                            <option>Videos</option>
+                                            <option>Audios</option>
+                                            <option>Others</option>
                                             </select>
                                         </div>
                                     </form>
@@ -54,131 +55,69 @@
                                 <div class="col-lg-12">
                                     <div class="category-style">
 
-                                        <a href={{ url('gallery2') }}>
-                                            <div class="category-style-wrap">
-                                                <img src="../img/categories/1.webp">
-                                            </div>
-                                        </a>
+                                        @foreach ($postAssets as $asset)
+                                            <a
+                                                href={{ url('gallery2/post-asset/' . $asset->id . '?post-asset=' . $asset->title_art) }}>
+                                                <div class="category-style-wrap">
+                                                    <img src="{{ $asset->title_art }}">
+                                                </div>
+                                            </a>
 
-                                        <a href={{ url('gallery2') }}>
-                                            <div class="category-style-wrap">
-                                                <img src="../img/categories/2.webp">
-                                            </div>
-                                        </a>
+                                            <a
+                                                href={{ url('gallery2/post-asset/' . $asset->id . '?post-asset=' . $asset->hero_image) }}>
+                                                <div class="category-style-wrap">
+                                                    <img src="{{ $asset->hero_image }}">
+                                                </div>
+                                            </a>
 
-                                        <a href={{ url('gallery2') }}>
-                                            <div class="category-style-wrap">
-                                                <img src="../img/categories/3.webp">
-                                            </div>
-                                        </a>
+                                            <a
+                                                href={{ url('gallery2/post-asset/' . $asset->id . '?post-asset=' . $asset->hero_video) }}>
+                                                <div class="category-style-wrap">
+                                                    <img src="{{ $asset->hero_video }}">
+                                                </div>
+                                            </a>
 
-                                        <a href={{ url('gallery2') }}>
-                                            <div class="category-style-wrap">
-                                                <img src="../img/categories/4.webp">
-                                            </div>
-                                        </a>
+                                            <a
+                                                href={{ url('gallery2/post-asset/' . $asset->id . '?post-asset=' . $asset->audio) }}>
+                                                <div class="category-style-wrap">
+                                                    <img src="{{ $asset->audio }}">
+                                                </div>
+                                            </a>
 
-                                        <a href={{ url('gallery2') }}>
-                                            <div class="category-style-wrap">
-                                                <img src="../img/categories/5.webp">
-                                            </div>
-                                        </a>
+                                            <a
+                                                href={{ url('gallery2/post-asset/' . $asset->id . '?post-asset=' . $asset->background_image) }}>
+                                                <div class="category-style-wrap">
+                                                    <img src="{{ $asset->background_image }}">
+                                                </div>
+                                            </a>
 
-                                        <a href={{ url('gallery2') }}>
-                                            <div class="category-style-wrap">
-                                                <img src="../img/categories/6.webp">
-                                            </div>
-                                        </a>
 
-                                        <a href={{ url('gallery2') }}>
-                                            <div class="category-style-wrap">
-                                                <img src="../img/categories/7.webp">
-                                            </div>
-                                        </a>
+                                        @endforeach
 
-                                        <a href={{ url('gallery2') }}>
-                                            <div class="category-style-wrap">
-                                                <img src="../img/categories/8.webp">
-                                            </div>
-                                        </a>
+                                        @foreach ($series as $s)
+                                            <a
+                                                href={{ url('gallery2/series/' . $s->id . '?series=' . $s->background_image) }}>
+                                                <div class="category-style-wrap">
+                                                    <img src="{{ $s->background_image }}">
+                                                </div>
+                                            </a>
 
-                                        <a href={{ url('gallery2') }}>
-                                            <div class="category-style-wrap">
-                                                <img src="../img/categories/9.webp">
-                                            </div>
-                                        </a>
+                                            <a
+                                                href={{ url('gallery2/series/' . $s->id . 'series=' . $s->header_image) }}>
+                                                <div class="category-style-wrap">
+                                                    <img src="{{ $s->header_image }}">
+                                                </div>
+                                            </a>
+                                        @endforeach
 
-                                        <a href={{ url('gallery2') }}>
-                                            <div class="category-style-wrap">
-                                                <img src="../img/categories/10.webp">
-                                            </div>
-                                        </a>
-
-                                        <a href={{ url('gallery2') }}>
-                                            <div class="category-style-wrap">
-                                                <img src="../img/categories/11.webp">
-                                            </div>
-                                        </a>
-
-                                        <a href={{ url('gallery2') }}>
-                                            <div class="category-style-wrap">
-                                                <img src="../img/categories/12.webp">
-                                            </div>
-                                        </a>
-
-                                        <a href={{ url('gallery2') }}>
-                                            <div class="category-style-wrap">
-                                                <img src="../img/categories/13.webp">
-                                            </div>
-                                        </a>
-
-                                        <a href={{ url('gallery2') }}>
-                                            <div class="category-style-wrap">
-                                                <img src="../img/categories/14.webp">
-                                            </div>
-                                        </a>
-
-                                        <a href={{ url('gallery2') }}>
-                                            <div class="category-style-wrap">
-                                                <img src="../img/categories/15.webp">
-                                            </div>
-                                        </a>
-
-                                        <a href={{ url('gallery2') }}>
-                                            <div class="category-style-wrap">
-                                                <img src="../img/categories/1.webp">
-                                            </div>
-                                        </a>
-
-                                        <a href={{ url('gallery2') }}>
-                                            <div class="category-style-wrap">
-                                                <img src="../img/categories/2.webp">
-                                            </div>
-                                        </a>
-
-                                        <a href={{ url('gallery2') }}>
-                                            <div class="category-style-wrap">
-                                                <img src="../img/categories/3.webp">
-                                            </div>
-                                        </a>
-
-                                        <a href={{ url('gallery2') }}>
-                                            <div class="category-style-wrap">
-                                                <img src="../img/categories/4.webp">
-                                            </div>
-                                        </a>
-
-                                        <a href={{ url('gallery2') }}>
-                                            <div class="category-style-wrap">
-                                                <img src="../img/categories/5.webp">
-                                            </div>
-                                        </a>
-
-                                        <a href={{ url('gallery2') }}>
-                                            <div class="category-style-wrap">
-                                                <img src="../img/categories/6.webp">
-                                            </div>
-                                        </a>
+                                        @foreach ($genres as $genre)
+                                            <a
+                                                href={{ url('gallery2/genres/' . $genre->id . '?genres=' . $genre->cover_image) }}>
+                                                <div class="category-style-wrap">
+                                                    <img src="{{ $genre->cover_image }}">
+                                                </div>
+                                            </a>
+                                        @endforeach
 
                                     </div>
                                 </div>

@@ -25,6 +25,8 @@ class GenreController extends Controller
             'cover_image' => $imageLink,
             'homepage_category' => isset($request->homepage_category) ? true : null,
             'search_page' => isset($request->search_page) ? true : null,
+            'is_active' => isset($request->archive) ? true : null,
+            'is_deleted' => false,
         ]);
 
         if ($newGenre) {
@@ -63,6 +65,83 @@ class GenreController extends Controller
         if ($updateGenre) {
             DB::commit();
             return redirect()->back()->with('success', 'Updated Successfully');
+        } else {
+            DB::rollback();
+        }
+    }
+
+    public function  moveToArchive($id)
+    {
+        DB::beginTransaction();
+
+        $genre = Genre::where('id', $id)->first();
+
+        if (!$genre) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Genre not found'
+            ]);
+        }
+
+        $genre->is_active = false;
+        if ($genre->save()) {
+            DB::commit();
+            return response()->json([
+                'error' => false,
+                'message' => 'Moved to Archive Successfully'
+            ]);
+        } else {
+            DB::rollback();
+        }
+    }
+
+    public function deleteGenre($id)
+    {
+        DB::beginTransaction();
+
+        $genre = Genre::where('id', $id)->first();
+
+        if (!$genre) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Genre not found'
+            ]);
+        }
+
+        $genre->is_deleted = true;
+        if ($genre->save()) {
+            DB::commit();
+            return response()->json([
+                'error' => false,
+                'message' => 'Deleted Successfully'
+            ]);
+        } else {
+            DB::rollback();
+        }
+    }
+
+    public function restoreGenre($id)
+    {
+        DB::beginTransaction();
+
+        $genre = Genre::where('id', $id)->first();
+
+        if (!$genre) {
+            return response()->json([
+                'error' => true,
+                'message' => 'Genre not found'
+            ]);
+        }
+
+        $genre->is_deleted = false;
+        $genre->is_active = true;
+
+        if ($genre->save()) {
+            DB::commit();
+            return response()->json([
+                'error' => false,
+                'message' => 'Restored Successfully'
+            ]);
         } else {
             DB::rollback();
         }

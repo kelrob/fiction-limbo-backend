@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Ad;
 use App\Genre;
 use App\Http\Controllers\Controller;
+use App\Post;
+use App\PostAsset;
 use App\PostType;
+use App\Series;
+use App\Setting;
+use App\User;
 use Illuminate\Http\Request;
 
 class PagesController extends Controller
@@ -56,9 +62,9 @@ class PagesController extends Controller
 
     public function genres()
     {
-        $genres = Genre::where('is_active', true)->with('user')->orderBy('created_at', 'DESC')->get();
+        $genres = Genre::where('is_active', true)->where('is_deleted', '!=',)->with('user')->orderBy('created_at', 'DESC')->get();
         $deletedGenres = Genre::where('is_deleted', true)->with('user')->orderBy('created_at', 'DESC')->get();
-        $archivedGenres = Genre::where('is_active', false)->with('user')->orderBy('created_at', 'DESC')->get();
+        $archivedGenres = Genre::where('is_active', false)->where('is_deleted', '!=', true)->with('user')->orderBy('created_at', 'DESC')->get();
 
         $genresCount = count($genres);
         $deletedCount = count($deletedGenres);
@@ -69,12 +75,28 @@ class PagesController extends Controller
 
     public function genresArchived()
     {
-        return view('admin.pages.genres-archived');
+        $genres = Genre::where('is_active', true)->where('is_deleted', '!=', true)->with('user')->orderBy('created_at', 'DESC')->get();
+        $deletedGenres = Genre::where('is_deleted', true)->with('user')->orderBy('created_at', 'DESC')->get();
+        $archivedGenres = Genre::where('is_active', false)->where('is_deleted', '!=', true)->with('user')->orderBy('created_at', 'DESC')->get();
+
+        $genresCount = count($genres);
+        $deletedCount = count($deletedGenres);
+        $archivedCount = count($archivedGenres);
+
+        return view('admin.pages.genres-archived', compact('archivedGenres', 'genresCount', 'deletedCount', 'archivedCount'));
     }
 
     public function genresDeleted()
     {
-        return view('admin.pages.genres-deleted');
+        $genres = Genre::where('is_active', true)->where('is_deleted', '!=', true)->with('user')->orderBy('created_at', 'DESC')->get();
+        $deletedGenres = Genre::where('is_deleted', true)->with('user')->orderBy('created_at', 'DESC')->get();
+        $archivedGenres = Genre::where('is_active', false)->where('is_deleted', '!=', true)->with('user')->orderBy('created_at', 'DESC')->get();
+
+        $genresCount = count($genres);
+        $deletedCount = count($deletedGenres);
+        $archivedCount = count($archivedGenres);
+
+        return view('admin.pages.genres-deleted', compact('deletedGenres', 'genresCount', 'deletedCount', 'archivedCount'));
     }
 
     public function editGenre($id)
@@ -85,52 +107,147 @@ class PagesController extends Controller
 
     public function series()
     {
-        return view('admin.pages.series');
+        $series = Series::where('is_active', true)->where('is_deleted', '!=', true)->with('user')->orderBy('created_at', 'DESC')->get();
+        $deletedSeries = Series::where('is_deleted', true)->with('user')->orderBy('created_at', 'DESC')->get();
+        $archivedSeries = Series::where('is_active', false)->where('is_deleted', '!=', true)->with('user')->orderBy('created_at', 'DESC')->get();
+
+        $seriesCount = count($series);
+        $deletedCount = count($deletedSeries);
+        $archivedCount = count($archivedSeries);
+        return view('admin.pages.series', compact('series', 'seriesCount', 'deletedCount', 'archivedCount'));
     }
 
     public function seriesArchived()
     {
-        return view('admin.pages.series-archived');
+        $series = Series::where('is_active', true)->where('is_deleted', '!=', true)->with('user')->orderBy('created_at', 'DESC')->get();
+        $deletedSeries = Series::where('is_deleted', true)->with('user')->orderBy('created_at', 'DESC')->get();
+        $archivedSeries = Series::where('is_active', false)->where('is_deleted', '!=', true)->with('user')->orderBy('created_at', 'DESC')->get();
+
+        $seriesCount = count($series);
+        $deletedCount = count($deletedSeries);
+        $archivedCount = count($archivedSeries);
+        return view('admin.pages.series-archived', compact('archivedSeries', 'seriesCount', 'deletedCount', 'archivedCount'));
     }
 
     public function seriesDeleted()
     {
-        return view('admin.pages.series-deleted');
+        $series = Series::where('is_active', true)->where('is_deleted', '!=', true)->with('user')->orderBy('created_at', 'DESC')->get();
+        $deletedSeries = Series::where('is_deleted', true)->with('user')->orderBy('created_at', 'DESC')->get();
+        $archivedSeries = Series::where('is_active', false)->where('is_deleted', '!=', true)->with('user')->orderBy('created_at', 'DESC')->get();
+
+        $seriesCount = count($series);
+        $deletedCount = count($deletedSeries);
+        $archivedCount = count($archivedSeries);
+        return view('admin.pages.series-deleted', compact('deletedSeries', 'seriesCount', 'deletedCount', 'archivedCount'));
+    }
+
+    public function uploadSeries()
+    {
+        $genres = Genre::where('is_active', true)->where('is_deleted', '!=', true)->with('user')->orderBy('created_at', 'DESC')->get();
+        return view('admin.pages.upload-series', compact('genres'));
+    }
+
+    public function editSeries($id)
+    {
+        $genres = Genre::where('is_active', true)->where('is_deleted', '!=', true)->with('user')->orderBy('created_at', 'DESC')->get();
+        $series = Series::where('id', $id)->first();
+        return view('admin.pages.edit-series', compact('series', 'genres'));
     }
 
     public function story()
     {
-        return view('admin.pages.story');
+        $stories = Post::where('is_active', true)->where('is_deleted', '!=', true)->orderBy('created_at', 'DESC')->get();
+        $deletedStories = Post::where('is_deleted', true)->orderBy('created_at', 'DESC')->get();
+        $archivedStories = Post::where('is_active', false)->where('is_deleted', '!=', true)->orderBy('created_at', 'DESC')->get();
+
+        $storiesCount = count($stories);
+        $deletedCount = count($deletedStories);
+        $archivedCount = count($archivedStories);
+
+        return view('admin.pages.story', compact('stories', 'storiesCount', 'deletedCount', 'archivedCount'));
     }
 
     public function addStory()
     {
-        return view('admin.pages.add-story');
+        $types = PostType::where('is_deleted', false)->orderBy('created_at', 'DESC')->get();
+        $series = Series::where('is_active', true)->where('is_deleted', '!=', true)->orderBy('created_at', 'DESC')->get();
+        $genres = Genre::where('is_active', true)->where('is_deleted', '!=',)->orderBy('created_at', 'DESC')->get();
+
+        return view('admin.pages.add-story', compact('types', 'series', 'genres'));
     }
 
-    public function storyMedia()
+    public function editStory($id)
     {
-        return view('admin.pages.story-media');
+        $types = PostType::where('is_deleted', false)->orderBy('created_at', 'DESC')->get();
+        $series = Series::where('is_active', true)->where('is_deleted', '!=', true)->orderBy('created_at', 'DESC')->get();
+        $genres = Genre::where('is_active', true)->where('is_deleted', '!=',)->orderBy('created_at', 'DESC')->get();
+        $story = Post::where('id', $id)->with('type', 'series', 'user', 'genre')->first();
+
+        return view('admin.pages.edit-story', compact('story', 'series', 'genres', 'types'));
+    }
+
+    public function storyMedia($id)
+    {
+        return view('admin.pages.story-media', compact('id'));
+    }
+
+    public function editStoryMedia($id)
+    {
+        $asset = PostAsset::where('post_id', $id)->first();
+        return view('admin.pages.edit-story-media', compact('id', 'asset'));
     }
 
     public function storyArchived()
     {
-        return view('admin.pages.story-archived');
+
+        $stories = Post::where('is_active', true)->where('is_deleted', '!=', true)->orderBy('created_at', 'DESC')->get();
+        $deletedStories = Post::where('is_deleted', true)->orderBy('created_at', 'DESC')->get();
+        $archivedStories = Post::where('is_active', false)->where('is_deleted', '!=', true)->orderBy('created_at', 'DESC')->get();
+
+        $storiesCount = count($stories);
+        $deletedCount = count($deletedStories);
+        $archivedCount = count($archivedStories);
+
+        return view('admin.pages.story-archived', compact('archivedStories', 'storiesCount', 'deletedCount', 'archivedCount'));
     }
 
     public function storyDeleted()
     {
-        return view('admin.pages.story-deleted');
+        $stories = Post::where('is_active', true)->where('is_deleted', '!=', true)->orderBy('created_at', 'DESC')->get();
+        $deletedStories = Post::where('is_deleted', true)->orderBy('created_at', 'DESC')->get();
+        $archivedStories = Post::where('is_active', false)->where('is_deleted', '!=', true)->orderBy('created_at', 'DESC')->get();
+
+        $storiesCount = count($stories);
+        $deletedCount = count($deletedStories);
+        $archivedCount = count($archivedStories);
+
+        return view('admin.pages.story-deleted', compact('deletedStories', 'storiesCount', 'deletedCount', 'archivedCount'));
     }
 
     public function gallery()
     {
-        return view('admin.pages.gallery');
+        $postAssets = PostAsset::orderBy('id', 'DESC')->get();
+        $genres = Genre::orderBy('id', 'Desc')->get();
+        $series = Series::orderBy('id', 'Desc')->get();
+
+        return view('admin.pages.gallery', compact('postAssets', 'genres', 'series'));
     }
 
-    public function gallery2()
+    public function gallery2($type, $id)
     {
-        return view('admin.pages.gallery2');
+        if ($type == 'post-asset') {
+            $details = PostAsset::where('post_id', $id)->with('post')->with('post.user')->first();
+        }
+
+        if ($type == 'series') {
+            $details = Series::where('id', $id)->with('user')->first();
+        }
+
+        if ($type == 'genres') {
+            $details = Genre::where('id', $id)->with('user')->first();
+        }
+
+        return view('admin.pages.gallery2', compact('details'));
     }
 
     public function backgrounds()
@@ -155,17 +272,41 @@ class PagesController extends Controller
 
     public function users()
     {
-        return view('admin.pages.users');
+        $users = User::orderBy('id', 'DESC')->get();
+        $verifiedUsers = User::where('is_verified', true)->orderBy('id', 'DESC')->get();
+        $restrictedUsers = User::where('is_restricted', true)->orderBy('id', 'DESC')->get();
+
+        $usersCount = count($users);
+        $verifiedUsersCount = count($verifiedUsers);
+        $restrictedUsersCount = count($restrictedUsers);
+        return view('admin.pages.users', compact('users', 'usersCount', 'verifiedUsersCount', 'restrictedUsersCount'));
     }
 
     public function usersRestricted()
     {
-        return view('admin.pages.users-restricted');
+
+        $users = User::orderBy('id', 'DESC')->get();
+        $verifiedUsers = User::where('is_verified', true)->orderBy('id', 'DESC')->get();
+        $restrictedUsers = User::where('is_restricted', true)->orderBy('id', 'DESC')->get();
+
+        $usersCount = count($users);
+        $verifiedUsersCount = count($verifiedUsers);
+        $restrictedUsersCount = count($restrictedUsers);
+
+        return view('admin.pages.users-restricted', compact('restrictedUsers', 'usersCount', 'verifiedUsersCount', 'restrictedUsersCount'));
     }
 
     public function usersVerified()
     {
-        return view('admin.pages.users-verified');
+        $users = User::orderBy('id', 'DESC')->get();
+        $verifiedUsers = User::where('is_verified', true)->orderBy('id', 'DESC')->get();
+        $restrictedUsers = User::where('is_restricted', true)->orderBy('id', 'DESC')->get();
+
+        $usersCount = count($users);
+        $verifiedUsersCount = count($verifiedUsers);
+        $restrictedUsersCount = count($restrictedUsers);
+
+        return view('admin.pages.users-verified', compact('verifiedUsers', 'usersCount', 'verifiedUsersCount', 'restrictedUsersCount'));
     }
 
     public function userDetails()
@@ -175,11 +316,13 @@ class PagesController extends Controller
 
     public function ads()
     {
-        return view('admin.pages.ads');
+        $ad = Ad::where('id', 1)->first();
+        return view('admin.pages.ads', compact('ad'));
     }
 
     public function settings()
     {
-        return view('admin.pages.settings');
+        $setting = Setting::where('id', 1)->first();
+        return view('admin.pages.settings', compact('setting'));
     }
 }

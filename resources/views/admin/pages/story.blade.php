@@ -10,16 +10,20 @@
                         <div class="admin-head">
                             <div class="row">
                                 <div class="col-lg-6" align="right">
-                                    <h2><span><a class="active-inner" href={{ url('story') }}>All (3)</a></span> |
-                                        <span><a href={{ url('story-archived') }}>Archive (1)</a></span> | <span><a
-                                                href={{ url('story-deleted') }}>Deleted (8)</a></span>
+                                    <h2><span><a class="active-inner" href={{ url('story') }}>All
+                                                ({{ $storiesCount }})</a></span> |
+                                        <span><a href={{ url('story-archived') }}>Archive
+                                                ({{ $archivedCount }})</a></span> | <span><a
+                                                href={{ url('story-deleted') }}>Deleted
+                                                ({{ $deletedCount }})</a></span>
                                     </h2>
                                 </div>
                                 <div class="col-lg-6">
                                     <form class="search-f-box">
                                         <div class="row">
                                             <div class="col">
-                                                <input type="text" class="form-control" id="" placeholder="Search by title">
+                                                <input type="text" class="form-control" id=""
+                                                    placeholder="Search by title">
                                             </div>
                                             <div class="col-auto">
                                                 <img class="search-icon img-fluid" src="../img/icons/search-icon.svg">
@@ -41,53 +45,27 @@
                                     </tr>
                                 </thead>
                                 <tbody id="myTable">
-                                    <tr>
-                                        <td scope="row"></td>
-                                        <td><span><a href="#">Buried For Good</a></span></td>
-                                        <td>14-04-2021</td>
-                                        <td>
-                                            <div class="table-action">
-                                                <a a href={{ url('add-story') }}><img
-                                                        src="../img/icons/admin/admin-edit.svg"></a>
-                                                <a href="#" data-toggle="modal" data-target="#archiveModal"><img
-                                                        class="down-arrow-margin" src="../img/icons/admin/archive.svg"></a>
-                                                <a href="#" data-toggle="modal" data-target="#deleteModal"><img
-                                                        src="../img/icons/admin/admin-del.svg"></a>
-                                            </div>
-                                        </td>
+                                    @foreach ($stories as $story)
+                                        <tr>
+                                            <td scope="row"></td>
+                                            <td><span><a href="#">{{ ucfirst($story->title) }}</a></span></td>
+                                            <td>{{ $story->created_at->format('j F, Y') }}</td>
+                                            <td>
+                                                <div class="table-action">
+                                                    <a href={{ url('edit-story/' . $story->id) }}><img
+                                                            src="../img/icons/admin/admin-edit.svg"></a>
+                                                    <a href="#"
+                                                        onclick="localStorage.setItem('story_id', {{ $story->id }})"
+                                                        data-toggle="modal" data-target="#archiveModal"><img
+                                                            class="down-arrow-margin"
+                                                            src="../img/icons/admin/archive.svg"></a>
+                                                    <a href="#" data-toggle="modal" data-target="#deleteModal"><img
+                                                            src="../img/icons/admin/admin-del.svg"></a>
+                                                </div>
+                                            </td>
 
-                                    </tr>
-                                    <tr>
-                                        <td scope="row"></td>
-                                        <td><span><a href={{ url('user-details') }}>Night Fall</a></span></td>
-                                        <td>11-04-2021</td>
-                                        <td>
-                                            <div class="table-action">
-                                                <a href={{ url('add-story') }}><img
-                                                        src="../img/icons/admin/admin-edit.svg"></a>
-                                                <a href="#" data-toggle="modal" data-target="#archiveModal"><img
-                                                        class="down-arrow-margin" src="../img/icons/admin/archive.svg"></a>
-                                                <a href="#" data-toggle="modal" data-target="#deleteModal"><img
-                                                        src="../img/icons/admin/admin-del.svg"></a>
-                                            </div>
-                                        </td>
-
-                                    </tr>
-                                    <tr>
-                                        <td scope="row"></td>
-                                        <td><span><a href={{ url('user-details') }}>Checkmate</a></span></td>
-                                        <td>14-05-2021</td>
-                                        <td>
-                                            <div class="table-action">
-                                                <a href={{ url('add-story') }}><img
-                                                        src="../img/icons/admin/admin-edit.svg"></a>
-                                                <a href="#" data-toggle="modal" data-target="#archiveModal"><img
-                                                        class="down-arrow-margin" src="../img/icons/admin/archive.svg"></a>
-                                                <a href="#" data-toggle="modal" data-target="#deleteModal"><img
-                                                        src="../img/icons/admin/admin-del.svg"></a>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -120,14 +98,14 @@
                     <div class="clearfix"></div>
 
                     <div class="">
-                        <div class="col-lg-3 offset-4">
-                            <a href={{ url('add-story') }}><button class="btn btn-warning new-story-btn">Add new
-                                    post</button></a>
-                        </div>
+                        <div class=" col-lg-3 offset-4">
+                        <a href={{ url('add-story') }}><button class="btn btn-warning new-story-btn">Add new
+                                post</button></a>
                     </div>
-
                 </div>
+
             </div>
+        </div>
         </div>
     </section>
 
@@ -164,6 +142,10 @@
             <div class="modal-content">
 
                 <div class="modal-body">
+
+                    <div class="alert alert-danger" id="error-message" style="display: none;"></div>
+                    <div class="alert alert-success" id="success-message" style="display: none;"></div>
+
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-8 offset-2">
@@ -171,7 +153,8 @@
                             </div>
                             <div class="col-md-8 offset-3">
 
-                                <a href={{ url('story') }}><button class="confirmation-yes">Yes</button></a>
+                                <a href='#' onclick="sendToArchive()"><button class="confirmation-yes"
+                                        id="confirmation-yes">Yes</button></a>
                                 <button class="confirmation-no" data-dismiss="modal">Cancel</button>
 
 
@@ -182,4 +165,31 @@
             </div>
         </div>
     </div>
+
+    <script>
+        const sendToArchive = () => {
+            const id = localStorage.getItem('story_id');
+            $('#confirmation-yes').attr('disabled', 'disabled').text('Please wait');
+
+            $.ajax({
+
+                url: `/archive-story/${id}`,
+                type: "GET",
+                success: function(response) {
+                    if (response.error === false) {
+                        $('#success-message').text(response.message).show();
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    } else if (response.error === true) {
+                        $('#error-message').text(response.message).show();
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    }
+                    localStorage.removeItem('story_id');
+                },
+            });
+        }
+    </script>
 @endsection

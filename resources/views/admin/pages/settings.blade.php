@@ -7,13 +7,24 @@
             <div id="content">
                 <div class="container">
 
-                    <form class="admin-form col-lg-7 ml-5">
+                    @if (session()->has('error'))
+                        <div class="alert alert-danger">
+                            {{ session()->get('error') }}
+                        </div>
+                    @endif
 
+                    @if (session()->has('success'))
+                        <div class="alert alert-success">
+                            {{ session()->get('success') }}
+                        </div>
+                    @endif
+                    <form class="admin-form col-lg-7 ml-5" method="POST" action="{{ url('update-settings') }}">
+                        @csrf()
                         <h2>Comments SPAM Control</h2>
 
                         <div class="form-group">
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="10"
-                                placeholder="Type in Words and Pharases that are not allowed in the comment section, please separate with a comma"></textarea>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="10" name="spam_control"
+                                placeholder="Type in Words and Pharases that are not allowed in the comment section, please separate with a comma">{{ $setting->spam_control }}</textarea>
                         </div>
 
 
@@ -24,22 +35,21 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Password</label>
-                                    <input type="password" class="form-control" id="exampleInputEmail1"
-                                        aria-describedby="emailHelp">
+                                    <input type="password" class="form-control" name="new_password"
+                                        id="exampleInputEmail1" aria-describedby="emailHelp">
                                 </div>
                             </div>
 
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Confirm Password</label>
-                                    <input type="password" class="form-control" id="exampleInputEmail1"
-                                        aria-describedby="emailHelp">
+                                    <input type="password" class="form-control" name="confirm_password"
+                                        id="exampleInputEmail1" aria-describedby="emailHelp">
                                 </div>
                             </div>
                         </div>
 
-                        <a href="#" data-toggle="modal" data-target="#confirmationModal"><button
-                                class="btn btn-warning next-btn" type="button">Save</button></a>
+                        <button class="btn btn-warning next-btn" type="submit">Save</button>
 
                     </form>
 

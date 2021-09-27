@@ -40,7 +40,6 @@
                                     <tr>
                                         <th class="numbering" scope="col"></th>
                                         <th scope="col">Type</th>
-                                        <th scope="col">Author</th>
                                         <th scope="col"></th>
                                     </tr>
                                 </thead>
@@ -49,8 +48,6 @@
                                         <tr>
                                             <td scope="row"></td>
                                             <td><span><a href="#">{{ ucfirst($type->name) }}</a></span></td>
-                                            <td width="50%">
-                                                {{ ucfirst($type->user->firstname . ' ' . $type->user->lastname) }}</td>
                                             <td>
                                                 <div class="table-action">
                                                     <a href="#" data-toggle="modal" data-target="#editModal"

@@ -13,17 +13,19 @@
                         <div class="admin-head">
                             <div class="row">
                                 <div class="col-lg-6" align="right">
-                                    <h2><span><a href={{ url('genres') }}>All (3)</a></span> | <span><a
+                                    <h2><span><a href={{ url('genres') }}>All ({{ $genresCount }})</a></span> | <span><a
                                                 class="active-inner" href={{ url('genres-archived') }}>Archived
-                                                (2)</a></span> | <span><a href={{ url('genres-deleted') }}>Deleted
-                                                (4)</a></span>
+                                                ({{ $archivedCount }})</a></span> | <span><a
+                                                href={{ url('genres-deleted') }}>Deleted
+                                                ({{ $deletedCount }})</a></span>
                                     </h2>
                                 </div>
                                 <div class="col-lg-6">
                                     <form class="search-f-box">
                                         <div class="row">
                                             <div class="col">
-                                                <input type="text" class="form-control" id="" placeholder="Search by title">
+                                                <input type="text" class="form-control" id=""
+                                                    placeholder="Search by title">
                                             </div>
                                             <div class="col-auto">
                                                 <img class="search-icon img-fluid" src="../img/icons/search-icon.svg">
@@ -45,45 +47,24 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td scope="row">1</td>
-                                        <td><span>Sad Stories</span></td>
-                                        <td>11-09-2021</td>
-                                        <td>
-                                            <div class="table-action">
-                                                <a href="#" data-toggle="modal" data-target="#genreModal"><img
-                                                        src="../img/icons/admin/admin-edit.svg"></a>
-                                                <a href="#" data-toggle="modal" data-target="#deleteModal"><img
-                                                        src="../img/icons/admin/admin-del.svg"></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">2</td>
-                                        <td><span>Non-Fiction</span></td>
-                                        <td>14-08-2021</td>
-                                        <td>
-                                            <div class="table-action">
-                                                <a href="#" data-toggle="modal" data-target="#genreModal"><img
-                                                        src="../img/icons/admin/admin-edit.svg"></a>
-                                                <a href="#" data-toggle="modal" data-target="#deleteModal"><img
-                                                        src="../img/icons/admin/admin-del.svg"></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">3</td>
-                                        <td><span>Horror Thrillers</span></td>
-                                        <td>16-04-2021</td>
-                                        <td>
-                                            <div class="table-action">
-                                                <a href="#" data-toggle="modal" data-target="#genreModal"><img
-                                                        src="../img/icons/admin/admin-edit.svg"></a>
-                                                <a href="#" data-toggle="modal" data-target="#deleteModal"><img
-                                                        src="../img/icons/admin/admin-del.svg"></a>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    @foreach ($archivedGenres as $archivedGenre)
+                                        <tr>
+                                            <td scope="row">{{ $loop->iteration }}</td>
+                                            <td><span>{{ $archivedGenre->title }}</span></td>
+                                            <td>{{ $archivedGenre->created_at->format('j F, Y') }}</td>
+                                            <td>
+                                                <div class="table-action">
+                                                    <a href="{{ url('genre/edit/' . $archivedGenre->id) }}"><img
+                                                            src="../img/icons/admin/admin-edit.svg"></a>
+                                                    <a href="#" data-toggle="modal"
+                                                        onclick="localStorage.setItem('id', {{ $archivedGenre->id }})"
+                                                        data-target="#deleteModal"><img
+                                                            src="../img/icons/admin/admin-del.svg"></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+
                                 </tbody>
                             </table>
                         </div>
@@ -240,6 +221,8 @@
             <div class="modal-content">
 
                 <div class="modal-body">
+                    <div class="alert alert-danger" id="delete-error-message" style="display: none;"></div>
+                    <div class="alert alert-success" id="delete-success-message" style="display: none;"></div>
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-8 offset-2">
@@ -247,7 +230,8 @@
                             </div>
                             <div class="col-md-8 offset-3">
 
-                                <a href={{ url('genres-archived') }}><button class="confirmation-yes">Yes</button></a>
+                                <a href="#" onclick="deleteGenre()"><button class="confirmation-yes"
+                                        id="delete-confirmation-yes">Yes</button></a>
                                 <button class="confirmation-no" data-dismiss="modal">Cancel</button>
 
 
@@ -289,6 +273,33 @@
             else
                 row.next().after(row);
         });
+    </script>
+
+    <script>
+        const deleteGenre = () => {
+            const id = localStorage.getItem('id');
+            $('#delete-confirmation-yes').attr('disabled', 'disabled').text('Please wait');
+
+            $.ajax({
+
+                url: `/delete-genre/${id}`,
+                type: "GET",
+                success: function(response) {
+                    if (response.error === false) {
+                        $('#delete-success-message').text(response.message).show();
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    } else if (response.error === true) {
+                        $('#delete-error-message').text(response.message).show();
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    }
+                    localStorage.removeItem('id');
+                },
+            });
+        }
     </script>
 
 @endsection

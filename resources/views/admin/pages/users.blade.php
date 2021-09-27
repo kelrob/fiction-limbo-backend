@@ -11,9 +11,12 @@
                         <div class="admin-head">
                             <div class="row">
                                 <div class="col-lg-7" align="right">
-                                    <h2><span><a class="active-inner" href={{ url('users') }}>All (493,442)</a></span> |
-                                        <span><a href={{ url('users-restricted') }}>Restricted (200)</a></span> | <span><a
-                                                href={{ url('users-verified') }}>Verified (400)</a></span>
+                                    <h2><span><a class="active-inner" href={{ url('users') }}>All
+                                                ({{ number_format($usersCount) }})</a></span> |
+                                        <span><a href={{ url('users-restricted') }}>Restricted
+                                                ({{ number_format($restrictedUsersCount) }})</a></span> | <span><a
+                                                href={{ url('users-verified') }}>Verified
+                                                ({{ number_format($verifiedUsersCount) }})</a></span>
                                     </h2>
                                 </div>
                                 <div class="col-lg-5">
@@ -44,27 +47,18 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td scope="row">1</td>
-                                        <td><span><a href={{ url('user-details') }}>Mark James</a></span></td>
-                                        <td>James234</td>
-                                        <td>markjames@gmail.com</td>
-                                        <td>11-04-2021</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">2</td>
-                                        <td><span><a href={{ url('user-details') }}>Jacob Okwoho</a></span></td>
-                                        <td>Thornton</td>
-                                        <td>okwohoJ@gmail.com</td>
-                                        <td>15-06-2021</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">3</td>
-                                        <td><span><a href={{ url('user-details') }}>Larry Walker</a></span></td>
-                                        <td>larrywalker2</td>
-                                        <td>larryw@gmail.com</td>
-                                        <td>19-09-2021</td>
-                                    </tr>
+                                    @foreach ($users as $user)
+                                        <tr>
+                                            <td scope="row">{{ $loop->iteration }}</td>
+                                            <td><span><a
+                                                        href={{ url('user-details') }}>{{ $user->firstname . ' ' . $user->lastname }}</a></span>
+                                            </td>
+                                            <td>{{ $user->username }}</td>
+                                            <td>{{ $user->email }}</td>
+                                            <td>{{ $user->created_at->format('d-m-Y') }}</td>
+                                        </tr>
+
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -97,12 +91,12 @@
                     <div class="clearfix"></div>
                     <!-- Main Action Button  -->
                     <div class="">
-                        <div class="col-lg-3 offset-4">
-                            <button class="btn btn-warning new-story-btn">Export All User Data</button></a>
-                        </div>
+                        <div class=" col-lg-3 offset-4">
+                        <button class="btn btn-warning new-story-btn">Export All User Data</button></a>
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </section>
 @endsection

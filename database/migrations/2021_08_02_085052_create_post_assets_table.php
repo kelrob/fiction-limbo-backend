@@ -16,6 +16,7 @@ class CreatePostAssetsTable extends Migration
         Schema::create('post_assets', function (Blueprint $table) {
             $table->id();
             $table->integer('post_id')->unsigned();
+            $table->string('title_art')->nullable();
             $table->string('hero_image');
             $table->string('hero_video')->nullable();
             $table->string('audio')->nullable();

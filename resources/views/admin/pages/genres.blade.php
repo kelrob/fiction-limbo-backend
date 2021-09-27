@@ -70,10 +70,13 @@
                                                         src="../img/icons/admin/up.svg">
                                                     <input type="image" class="move down" width="18px" img
                                                         src="../img/icons/admin/down.svg">
-                                                    <a href="#" data-toggle="modal" data-target="#archiveModal"><img
+                                                    <a href="#" onclick="localStorage.setItem('id', {{ $genre->id }})"
+                                                        data-toggle="modal" data-target="#archiveModal"><img
                                                             class="down-arrow-margin"
                                                             src="../img/icons/admin/archive.svg"></a>
-                                                    <a href="#" data-toggle="modal" data-target="#deleteModal"><img
+                                                    <a href="#" data-toggle="modal"
+                                                        onclick="localStorage.setItem('id', {{ $genre->id }})"
+                                                        data-target="#deleteModal"><img
                                                             src="../img/icons/admin/admin-del.svg"></a>
                                                 </div>
                                             </td>
@@ -264,6 +267,10 @@
             <div class="modal-content">
 
                 <div class="modal-body">
+
+                    <div class="alert alert-danger" id="error-message" style="display: none;"></div>
+                    <div class="alert alert-success" id="success-message" style="display: none;"></div>
+
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-8 offset-2">
@@ -271,7 +278,8 @@
                             </div>
                             <div class="col-md-8 offset-3">
 
-                                <a href={{ url('genres') }}><button class="confirmation-yes">Yes</button></a>
+                                <a href="#" onclick="sendToArchive()"><button class="confirmation-yes"
+                                        id="confirmation-yes">Yes</button></a>
                                 <button class="confirmation-no" data-dismiss="modal">Cancel</button>
 
 
@@ -291,6 +299,9 @@
             <div class="modal-content">
 
                 <div class="modal-body">
+
+                    <div class="alert alert-danger" id="delete-error-message" style="display: none;"></div>
+                    <div class="alert alert-success" id="delete-success-message" style="display: none;"></div>
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-8 offset-2">
@@ -298,7 +309,8 @@
                             </div>
                             <div class="col-md-8 offset-3">
 
-                                <a href={{ url('genres') }}><button class="confirmation-yes">Yes</button></a>
+                                <a href="#" onclick="deleteGenre()"><button class="confirmation-yes"
+                                        id="delete-confirmation-yes">Yes</button></a>
                                 <button class="confirmation-no" data-dismiss="modal">Cancel</button>
 
 
@@ -342,4 +354,55 @@
         });
     </script>
 
+    <script>
+        const sendToArchive = () => {
+            const id = localStorage.getItem('id');
+            $('#confirmation-yes').attr('disabled', 'disabled').text('Please wait');
+
+            $.ajax({
+
+                url: `/archive-genre/${id}`,
+                type: "GET",
+                success: function(response) {
+                    if (response.error === false) {
+                        $('#success-message').text(response.message).show();
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    } else if (response.error === true) {
+                        $('#error-message').text(response.message).show();
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    }
+                    localStorage.removeItem('id');
+                },
+            });
+        }
+
+        const deleteGenre = () => {
+            const id = localStorage.getItem('id');
+            $('#delete-confirmation-yes').attr('disabled', 'disabled').text('Please wait');
+
+            $.ajax({
+
+                url: `/delete-genre/${id}`,
+                type: "GET",
+                success: function(response) {
+                    if (response.error === false) {
+                        $('#delete-success-message').text(response.message).show();
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    } else if (response.error === true) {
+                        $('#delete-error-message').text(response.message).show();
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    }
+                    localStorage.removeItem('id');
+                },
+            });
+        }
+    </script>
 @endsection

@@ -8,74 +8,87 @@
             <div id="content">
                 <div class="container">
 
-                    <form class="admin-form col-lg-7 ml-5">
-
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <form class="admin-form col-lg-7 ml-5" enctype="multipart/form-data" method="POST"
+                        action="{{ url('upload-post-asset') }}">
+                        @csrf()
                         <label for="exampleInputEmail1">Title art</label>
                         <div class="input-group">
-                            <input type="email" class="form-control">
+                            <input type="file" name="title_art" class="form-control">
                             <span class="input-group-btn">
-                                <button class="btn admin-upload-btn" type="submit"><img
+                                <button class="btn admin-upload-btn" type="button"><img
                                         src="../img/icons/admin/upload.svg">Select</button>
                             </span>
                         </div>
 
                         <label for="exampleInputEmail1">Hero Image</label>
                         <div class="input-group">
-                            <input type="email" class="form-control">
+                            <input type="file" name="hero_image" class="form-control">
                             <span class="input-group-btn">
-                                <button class="btn admin-upload-btn" type="submit"><img
+                                <button class="btn admin-upload-btn" type="button"><img
                                         src="../img/icons/admin/upload.svg">Select</button>
                             </span>
                         </div>
 
                         <label for="exampleInputEmail1">Hero Video</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="optional">
+                            <input type="file" name="hero_video" class="form-control" placeholder="optional">
                             <span class="input-group-btn">
-                                <button class="btn admin-upload-btn" type="submit"><img
+                                <button class="btn admin-upload-btn" type="button"><img
                                         src="../img/icons/admin/upload.svg">Select</button>
                             </span>
                         </div>
 
                         <label for="exampleInputEmail1">Post Audio File</label>
                         <div class="input-group">
-                            <input type="email" class="form-control">
+                            <input type="file" name="audio" class="form-control">
                             <span class="input-group-btn">
-                                <button class="btn admin-upload-btn" type="submit"><img
+                                <button class="btn admin-upload-btn" type="button"><img
                                         src="../img/icons/admin/upload.svg">Select</button>
                             </span>
                         </div>
 
                         <label for="exampleInputEmail1">Post Background Image</label>
                         <div class="input-group">
-                            <input type="email" class="form-control">
+                            <input type="file" name="background_image" class="form-control">
                             <span class="input-group-btn">
-                                <button class="btn admin-upload-btn" type="submit"><img
+                                <button class="btn admin-upload-btn" type="button"><img
                                         src="../img/icons/admin/upload.svg">Select</button>
                             </span>
                         </div>
 
                         <label for="exampleInputEmail1">Image credits</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                            <input type="text" name="image_credits" class="form-control" id="exampleInputEmail1"
+                                aria-describedby="emailHelp">
                         </div>
 
                         <label for="exampleInputEmail1">Description</label>
                         <div class="input-group">
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="10"></textarea>
+                            <textarea name="description" class="form-control" id="exampleFormControlTextarea1"
+                                rows="10"></textarea>
                         </div>
 
                         <label for="exampleInputEmail1">Credits</label>
                         <div class="input-group">
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="10"></textarea>
+                            <textarea name="credits" class="form-control" id="exampleFormControlTextarea1"
+                                rows="10"></textarea>
                         </div>
 
-                        <a href="#" data-toggle="modal" data-target="#publishConfirm"><button
-                                class="btn btn-warning next-btn" type="button">Publish</button></a>
-                        <a href="#" data-toggle="modal" data-target="#draftConfirm"><button class="btn btn-dark draft-btn"
-                                type="button">Draft</button></a>
-                        <a href={{ url('add-story') }}><button class="btn btn-dark back-btn"
-                                type="button">Back</button></a>
+                        <input type="hidden" name="post_id" value="{{ $id }}" />
+
+                        <button class="btn btn-warning next-btn" type="submit">Publish</button>
+                        {{-- <a href="#" data-toggle="modal" data-target="#draftConfirm"><button class="btn btn-dark draft-btn"
+                                type="button">Draft</button></a> --}}
+                        <a href='#'><button class="btn btn-dark back-btn" type="button">Cancel</button></a>
 
                     </form>
 

@@ -25,7 +25,7 @@
                         class={{ Route::is('genres') || Route::is('genres-edit') || Route::is('genres-archived') || Route::is('genres-deleted') ? 'active' : '' }}>Genres</a>
                 </li>
                 <li>
-                    <a href={{ url('series') }}
+                    <a href={{ url('all-series') }}
                         class={{ Route::is('series') || Route::is('series-archived') || Route::is('series-deleted') ? 'active' : '' }}>Series</a>
                 </li>
             </ul>

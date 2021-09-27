@@ -85,4 +85,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Genre::class);
     }
+
+    public function series()
+    {
+        return $this->hasMany(Series::class);
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
 }

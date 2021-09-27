@@ -8,46 +8,50 @@
             <div id="content">
                 <div class="container">
 
-                    <form class="admin-form col-lg-7 ml-5">
-
+                    @if (session()->has('success'))
+                        <div class="alert alert-success">
+                            {{ session()->get('success') }}
+                        </div>
+                    @endif
+                    <form class="admin-form col-lg-7 ml-5" method="POST" action="{{ url('publish-ad') }}">
+                        @csrf()
                         <label for="exampleInputEmail1">Story Page AD 1</label>
                         <div class="input-group">
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="4"></textarea>
+                            <textarea class="form-control" name="story_page_first_ad" id="exampleFormControlTextarea1"
+                                rows="4">{{ $ad->story_page_first_ad }}</textarea>
                         </div>
 
                         <label for="exampleInputEmail1">Story Page AD 2</label>
                         <div class="input-group">
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="4"></textarea>
+                            <textarea class="form-control" name="story_page_second_ad" id="exampleFormControlTextarea1"
+                                rows="4">{{ $ad->story_page_second_ad }}</textarea>
                         </div>
 
                         <label for="exampleInputEmail1">Profile Page AD</label>
                         <div class="input-group">
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="4"></textarea>
+                            <textarea class="form-control" name="profile_page_ad" id="exampleFormControlTextarea1"
+                                rows="4">{{ $ad->profile_page_ad }}</textarea>
                         </div>
 
                         <label for="exampleInputEmail1">Series Page AD</label>
                         <div class="input-group">
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="4"></textarea>
+                            <textarea class="form-control" name="series_page_ad" id="exampleFormControlTextarea1"
+                                rows="4">{{ $ad->series_page_ad }}</textarea>
                         </div>
 
                         <label for="exampleInputEmail1">Shelf Page AD</label>
                         <div class="input-group">
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="4"></textarea>
+                            <textarea class="form-control" name="shelf_page_ad" id="exampleFormControlTextarea1"
+                                rows="4">{{ $ad->shelf_page_ad }}</textarea>
                         </div>
 
                         <label for="exampleInputEmail1">Playlist Page AD</label>
                         <div class="input-group">
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="4"></textarea>
+                            <textarea class="form-control" name="playlist_page_ad" id="exampleFormControlTextarea1"
+                                rows="4">{{ $ad->playlist_page_ad }}</textarea>
                         </div>
 
-                        <label for="exampleInputEmail1">Profile Page AD</label>
-                        <div class="input-group">
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="4"></textarea>
-                        </div>
-
-                        <a href="#" data-toggle="modal" data-target="#confirmationModal"><button
-                                class="btn btn-warning next-btn" type="button">Save</button></a>
-
+                        <button class="btn btn-warning next-btn" type="submit">Save</button>
                     </form>
 
                 </div>

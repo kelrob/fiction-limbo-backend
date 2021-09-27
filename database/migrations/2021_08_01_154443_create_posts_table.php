@@ -22,10 +22,12 @@ class CreatePostsTable extends Migration
             $table->integer('author_id')->unsigned();
             $table->integer('genre_id')->unsigned();
             $table->text('tags')->nullable();
-            $table->string('cta_btn');
+            $table->string('cta_btn_text');
             $table->string('cta_btn_link');
             $table->text('post');
             $table->boolean('is_featured')->default(false);
+            $table->boolean('is_active')->default(true);
+            $table->boolean('is_deleted')->default(false);
             $table->timestamps();
         });
     }

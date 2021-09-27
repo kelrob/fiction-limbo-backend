@@ -12,16 +12,18 @@
                         <div class="admin-head">
                             <div class="row">
                                 <div class="col-lg-6" align="right">
-                                    <h2><span><a href={{ url('story') }}>All (3)</a></span> | <span><a
-                                                href={{ url('story-archived') }}>Archived (2)</a></span> | <span><a
-                                                class="active-inner" href={{ url('story-deleted') }}>Deleted
-                                                (4)</a></span></h2>
+                                    <h2><span><a href={{ url('story') }}>All ({{ $storiesCount }})</a></span> | <span><a
+                                                href={{ url('story-archived') }}>Archived
+                                                ({{ $archivedCount }})</a></span> | <span><a class="active-inner"
+                                                href={{ url('story-deleted') }}>Deleted
+                                                ({{ $deletedCount }})</a></span></h2>
                                 </div>
                                 <div class="col-lg-6">
                                     <form class="search-f-box">
                                         <div class="row">
                                             <div class="col">
-                                                <input type="text" class="form-control" id="" placeholder="Search by title">
+                                                <input type="text" class="form-control" id=""
+                                                    placeholder="Search by title">
                                             </div>
                                             <div class="col-auto">
                                                 <img class="search-icon img-fluid" src="../img/icons/search-icon.svg">
@@ -43,39 +45,21 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td scope="row">1</td>
-                                        <td><span>Who Killed Oreva</span></td>
-                                        <td>11-09-2021</td>
-                                        <td>
-                                            <div class="table-action">
-                                                <a href="#" data-toggle="modal" data-target="#restoreModal"><img
-                                                        src="../img/icons/admin/admin-restore.svg"></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">2</td>
-                                        <td><span>Daddy Dearest</span></td>
-                                        <td>14-08-2021</td>
-                                        <td>
-                                            <div class="table-action">
-                                                <a href="#" data-toggle="modal" data-target="#restoreModal"><img
-                                                        src="../img/icons/admin/admin-restore.svg"></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">3</td>
-                                        <td><span>Children Of Eris</span></td>
-                                        <td>16-04-2021</td>
-                                        <td>
-                                            <div class="table-action">
-                                                <a href="#" data-toggle="modal" data-target="#restoreModal"><img
-                                                        src="../img/icons/admin/admin-restore.svg"></a>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    @foreach ($deletedStories as $story)
+                                        <tr>
+                                            <td scope="row">1</td>
+                                            <td><span>{{ ucfirst($story->title) }}</span></td>
+                                            <td>{{ $story->created_at->format('j F, Y') }}</td>
+                                            <td>
+                                                <div class="table-action">
+                                                    <a href="#"
+                                                        onclick="localStorage.setItem('story_id', {{ $story->id }})"
+                                                        data-toggle="modal" data-target="#restoreModal"><img
+                                                            src="../img/icons/admin/admin-restore.svg"></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -120,6 +104,8 @@
             <div class="modal-content">
 
                 <div class="modal-body">
+                    <div class="alert alert-danger" id="restore-error-message" style="display: none;"></div>
+                    <div class="alert alert-success" id="restore-success-message" style="display: none;"></div>
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-8 offset-2">
@@ -127,7 +113,8 @@
                             </div>
                             <div class="col-md-8 offset-3">
 
-                                <a href={{ url('story') }}><button class="confirmation-yes">Yes</button></a>
+                                <a href='#' onclick="restoreStory()"><button class="confirmation-yes"
+                                        id="restore-confirmation-yes">Yes</button></a>
                                 <button class="confirmation-no" data-dismiss="modal">Cancel</button>
 
 
@@ -138,4 +125,31 @@
             </div>
         </div>
     </div>
+
+    <script>
+        const restoreStory = () => {
+            const id = localStorage.getItem('story_id');
+            $('#restore-confirmation-yes').attr('disabled', 'disabled').text('Please wait');
+
+            $.ajax({
+
+                url: `/restore-story/${id}`,
+                type: "GET",
+                success: function(response) {
+                    if (response.error === false) {
+                        $('#restore-success-message').text(response.message).show();
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    } else if (response.error === true) {
+                        $('#restore-error-message').text(response.message).show();
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    }
+                    localStorage.removeItem('story_id');
+                },
+            });
+        }
+    </script>
 @endsection

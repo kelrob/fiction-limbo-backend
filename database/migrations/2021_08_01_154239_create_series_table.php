@@ -17,7 +17,12 @@ class CreateSeriesTable extends Migration
             $table->id();
             $table->integer('user_id')->unsigned();
             $table->string('title');
+            $table->integer('genre_id');
+            $table->string('header_image');
+            $table->string('background_image');
+            $table->text('description');
             $table->boolean('is_active')->default(true);
+            $table->boolean('is_deleted')->default(false);
             $table->timestamps();
         });
     }

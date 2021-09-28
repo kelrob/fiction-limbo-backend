@@ -13,17 +13,21 @@
                         <div class="admin-head">
                             <div class="row">
                                 <div class="col-lg-6" align="right">
-                                    <h2><span><a class="active-inner" href={{ url('featured-posts') }}>All (3)</a></span>
+                                    <h2><span><a class="active-inner" href={{ url('featured-posts') }}>All
+                                                ({{ $featuredPostCount }})</a></span>
                                         |
-                                        <span><a href={{ url('featured-post-draft') }}>Draft (1)</a></span> | <span><a
-                                                href={{ url('featured-post-deleted') }}>Deleted (8)</a></span>
+                                        <span><a href={{ url('featured-post-draft') }}>Draft
+                                                ({{ $featuredPostDraftCount }})</a></span> | <span><a
+                                                href={{ url('featured-post-deleted') }}>Deleted
+                                                ({{ $featuredPostDeletedCount }})</a></span>
                                     </h2>
                                 </div>
                                 <div class="col-lg-6">
                                     <form class="search-f-box">
                                         <div class="row">
                                             <div class="col">
-                                                <input type="text" class="form-control" id="" placeholder="Search by title">
+                                                <input type="text" class="form-control" id=""
+                                                    placeholder="Search by title">
                                             </div>
                                             <div class="col-auto">
                                                 <img class="search-icon img-fluid" src="../img/icons/search-icon.svg">
@@ -46,48 +50,25 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td scope="row">1</td>
-                                        <td><span>Son of the crow</span></td>
-                                        <td>Short Story</td>
-                                        <td>23-04-21</td>
-                                        <td>
-                                            <div class="table-action">
-                                                <a href="#" data-toggle="modal" data-target="#firstModal"><img
-                                                        src="../img/icons/admin/admin-edit.svg"></a>
-                                                <a href="#" data-toggle="modal" data-target="#deleteModal"><img
-                                                        src="../img/icons/admin/admin-del.svg"></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">2</td>
-                                        <td><span>Checkmate</span></td>
-                                        <td>Poem</td>
-                                        <td>03-06-21</td>
-                                        <td>
-                                            <div class="table-action">
-                                                <a href="#" data-toggle="modal" data-target="#firstModal"><img
-                                                        src="../img/icons/admin/admin-edit.svg"></a>
-                                                <a href="#" data-toggle="modal" data-target="#deleteModal"><img
-                                                        src="../img/icons/admin/admin-del.svg"></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">3</td>
-                                        <td><span>Buried For Good</span></td>
-                                        <td>Series</td>
-                                        <td>23-07-21</td>
-                                        <td>
-                                            <div class="table-action">
-                                                <a href="#" data-toggle="modal" data-target="#firstModal"><img
-                                                        src="../img/icons/admin/admin-edit.svg"></a>
-                                                <a href="#" data-toggle="modal" data-target="#deleteModal"><img
-                                                        src="../img/icons/admin/admin-del.svg"></a>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    @foreach ($featuredPosts as $post)
+                                        <tr>
+                                            <td scope="row">{{ $loop->iteration }}</td>
+                                            <td><span>{{ $post->title }}</span></td>
+                                            <td>{{ $post->type->name }}</td>
+                                            <td>{{ $post->created_at->format('d-m-Y') }}</td>
+                                            <td>
+                                                <div class="table-action">
+                                                    <a href={{ url('edit-story/' . $post->id) }}><img
+                                                            src="../img/icons/admin/admin-edit.svg"></a>
+                                                    <a href="#"
+                                                        onclick="localStorage.setItem('story_id', {{ $post->id }})"
+                                                        data-toggle="modal" data-target="#deleteModal"><img
+                                                            src="../img/icons/admin/admin-del.svg"></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -120,16 +101,72 @@
                     <div class="clearfix"></div>
                     <!-- Main Action Button  -->
                     <div class="">
-                        <div class="col-lg-3 offset-4">
-                            <a href="#" data-toggle="modal" data-target="#firstModal"><button
-                                    class="btn btn-warning new-story-btn">Add new post</button></a>
+                        <div class=" col-lg-3 offset-4">
+                        <a href="#" data-toggle="modal" data-target="#firstModal"><button
+                                class="btn btn-warning new-story-btn">Add new post</button></a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        </div>
+
+        <!-- Delete Confirmation Modal -->
+        <div class="modal-short fade admin-custom-modal" id="deleteModal" data-backdrop="static" data-keyboard="false"
+            tabindex="-1" aria-labelledby="confirmationModal" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+
+                    <div class="modal-body">
+                        <div class="alert alert-danger" id="delete-error-message" style="display: none;"></div>
+                        <div class="alert alert-success" id="delete-success-message" style="display: none;"></div>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-8 offset-2">
+                                    <div class="confirmation-text">Are You Sure You Want To Delete This Story?</div>
+                                </div>
+                                <div class="col-md-8 offset-3">
+
+                                    <a href='#'><button class="confirmation-yes" onclick="deleteStory()"
+                                            id="delete-confirmation-yes">Yes</button></a>
+                                    <button class="confirmation-no" data-dismiss="modal">Cancel</button>
+
+
+                                </div>
+                            </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </section>
+
+    <script>
+        const deleteStory = () => {
+            const id = localStorage.getItem('story_id');
+            $('#delete-confirmation-yes').attr('disabled', 'disabled').text('Please wait');
+
+            $.ajax({
+
+                url: `/delete-story/${id}`,
+                type: "GET",
+                success: function(response) {
+                    if (response.error === false) {
+                        $('#delete-success-message').text(response.message).show();
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    } else if (response.error === true) {
+                        $('#delete-error-message').text(response.message).show();
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    }
+                    localStorage.removeItem('story_id');
+                },
+            });
+        }
+    </script>
 
     @include('admin.includes.modals')
 

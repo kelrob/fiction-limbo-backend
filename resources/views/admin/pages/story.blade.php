@@ -59,7 +59,9 @@
                                                         data-toggle="modal" data-target="#archiveModal"><img
                                                             class="down-arrow-margin"
                                                             src="../img/icons/admin/archive.svg"></a>
-                                                    <a href="#" data-toggle="modal" data-target="#deleteModal"><img
+                                                    <a href="#"
+                                                        onclick="localStorage.setItem('story_id', {{ $story->id }})"
+                                                        data-toggle="modal" data-target="#deleteModal"><img
                                                             src="../img/icons/admin/admin-del.svg"></a>
                                                 </div>
                                             </td>
@@ -116,6 +118,8 @@
             <div class="modal-content">
 
                 <div class="modal-body">
+                    <div class="alert alert-danger" id="delete-error-message" style="display: none;"></div>
+                    <div class="alert alert-success" id="delete-success-message" style="display: none;"></div>
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-8 offset-2">
@@ -123,7 +127,8 @@
                             </div>
                             <div class="col-md-8 offset-3">
 
-                                <a href={{ url('story') }}><button class="confirmation-yes">Yes</button></a>
+                                <a href='#'><button class="confirmation-yes" onclick="deleteStory()"
+                                        id="delete-confirmation-yes">Yes</button></a>
                                 <button class="confirmation-no" data-dismiss="modal">Cancel</button>
 
 
@@ -183,6 +188,31 @@
                         }, 1000);
                     } else if (response.error === true) {
                         $('#error-message').text(response.message).show();
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    }
+                    localStorage.removeItem('story_id');
+                },
+            });
+        }
+
+        const deleteStory = () => {
+            const id = localStorage.getItem('story_id');
+            $('#delete-confirmation-yes').attr('disabled', 'disabled').text('Please wait');
+
+            $.ajax({
+
+                url: `/delete-story/${id}`,
+                type: "GET",
+                success: function(response) {
+                    if (response.error === false) {
+                        $('#delete-success-message').text(response.message).show();
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    } else if (response.error === true) {
+                        $('#delete-error-message').text(response.message).show();
                         setTimeout(() => {
                             window.location.reload();
                         }, 1000);

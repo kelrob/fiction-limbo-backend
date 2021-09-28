@@ -12,16 +12,19 @@
                         <div class="admin-head">
                             <div class="row">
                                 <div class="col-lg-6" align="right">
-                                    <h2><span><a href={{ url('featured-posts') }}>All (3)</a></span> | <span><a
-                                                href={{ url('featured-post-draft') }}>Draft (1)</a></span> | <span><a
+                                    <h2><span><a href={{ url('featured-posts') }}>All
+                                                ({{ $featuredPostCount }})</a></span> | <span><a
+                                                href={{ url('featured-post-draft') }}>Draft
+                                                ({{ $featuredPostDraftCount }})</a></span> | <span><a
                                                 class="active-inner" href={{ url('featured-post-deleted') }}>Deleted
-                                                (8)</a></span></h2>
+                                                ({{ $featuredPostDeletedCount }})</a></span></h2>
                                 </div>
                                 <div class="col-lg-6">
                                     <form class="search-f-box">
                                         <div class="row">
                                             <div class="col">
-                                                <input type="text" class="form-control" id="" placeholder="Search by title">
+                                                <input type="text" class="form-control" id=""
+                                                    placeholder="Search by title">
                                             </div>
                                             <div class="col-auto">
                                                 <img class="search-icon img-fluid" src="../img/icons/search-icon.svg">
@@ -43,38 +46,22 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td scope="row">1</td>
-                                        <td><span>Araromire</span></td>
-                                        <td>Short Story</td>
-                                        <td>
-                                            <div class="table-action">
-                                                <a href="#" data-toggle="modal" data-target="#restoreModal"><img
-                                                        src="../img/icons/admin/admin-restore.svg"></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">2</td>
-                                        <td><span>Birthday Cards</span></td>
-                                        <td>Poem</td>
-                                        <td>
-                                            <div class="table-action">
-                                                <a href="#" data-toggle="modal" data-target="#restoreModal"><img
-                                                        src="../img/icons/admin/admin-restore.svg"></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">3</td>
-                                        <td><span>Rosa Pancakes</span></td>
-                                        <td>Series</td>
-                                        <td>
-                                            <div class="table-action">
-                                                <a href="#" data-toggle="modal" data-target="#restoreModal"><img
-                                                        src="../img/icons/admin/admin-restore.svg"></a>
-                                        </td>
-                                    </tr>
+                                    @foreach ($featuredPostDeleted as $post)
+                                        <tr>
+                                            <td scope="row">{{ $loop->iteration }}</td>
+                                            <td><span>{{ $post->title }}</span></td>
+                                            <td>{{ $post->type->name }}</td>
+                                            <td>
+                                                <div class="table-action">
+                                                    <a href="#"
+                                                        onclick="localStorage.setItem('story_id', {{ $post->id }})"
+                                                        data-toggle="modal" data-target="#restoreModal"><img
+                                                            src="../img/icons/admin/admin-restore.svg"></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -109,7 +96,63 @@
                 </div>
             </div>
         </div>
+
+        <!-- Restore Modal -->
+        <div class="modal-short fade admin-custom-modal" id="restoreModal" data-backdrop="static" data-keyboard="false"
+            tabindex="-1" aria-labelledby="restoreModal" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+
+                    <div class="modal-body">
+                        <div class="alert alert-danger" id="restore-error-message" style="display: none;"></div>
+                        <div class="alert alert-success" id="restore-success-message" style="display: none;"></div>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-8 offset-2">
+                                    <div class="confirmation-text">Are You Sure?</div>
+                                </div>
+                                <div class="col-md-8 offset-3">
+
+                                    <a href='#' onclick="restoreStory()"><button class="confirmation-yes"
+                                            id="restore-confirmation-yes">Yes</button></a>
+                                    <button class="confirmation-no" data-dismiss="modal">Cancel</button>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 
+
+    <script>
+        const restoreStory = () => {
+            const id = localStorage.getItem('story_id');
+            $('#restore-confirmation-yes').attr('disabled', 'disabled').text('Please wait');
+
+            $.ajax({
+
+                url: `/restore-story/${id}`,
+                type: "GET",
+                success: function(response) {
+                    if (response.error === false) {
+                        $('#restore-success-message').text(response.message).show();
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    } else if (response.error === true) {
+                        $('#restore-error-message').text(response.message).show();
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    }
+                    localStorage.removeItem('story_id');
+                },
+            });
+        }
+    </script>
     @include('admin.includes.modals')
 @endsection

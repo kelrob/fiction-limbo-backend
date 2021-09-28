@@ -29,17 +29,41 @@ class PagesController extends Controller
 
     public function featuredPosts()
     {
-        return view('admin.pages.featured-posts');
+        $featuredPosts = Post::where('is_active', true)->where('is_featured', true)->where('is_deleted', '!=', true)->with('type')->orderBy('created_at', 'DESC')->get();
+        $featuredPostDraft = Post::where('is_active', false)->where('is_featured', true)->where('is_deleted', '!=', true)->with('type')->orderBy('created_at', 'DESC')->get();
+        $featuredPostDeleted = Post::where('is_featured', true)->where('is_deleted', true)->with('type')->orderBy('created_at', 'DESC')->get();
+
+        $featuredPostCount = count($featuredPosts);
+        $featuredPostDraftCount = count($featuredPostDraft);
+        $featuredPostDeletedCount = count($featuredPostDeleted);
+
+        return view('admin.pages.featured-posts', compact('featuredPosts', 'featuredPostCount', 'featuredPostDraftCount', 'featuredPostDeletedCount'));
     }
 
     public function featuredPostDraft()
     {
-        return view('admin.pages.featured-post-draft');
+        $featuredPosts = Post::where('is_active', true)->where('is_featured', true)->where('is_deleted', '!=', true)->with('type')->orderBy('created_at', 'DESC')->get();
+        $featuredPostDraft = Post::where('is_active', false)->where('is_featured', true)->where('is_deleted', '!=', true)->with('type')->orderBy('created_at', 'DESC')->get();
+        $featuredPostDeleted = Post::where('is_featured', true)->where('is_deleted', true)->with('type')->orderBy('created_at', 'DESC')->get();
+
+        $featuredPostCount = count($featuredPosts);
+        $featuredPostDraftCount = count($featuredPostDraft);
+        $featuredPostDeletedCount = count($featuredPostDeleted);
+
+        return view('admin.pages.featured-post-draft', compact('featuredPostDraft', 'featuredPostCount', 'featuredPostDraftCount', 'featuredPostDeletedCount'));
     }
 
     public function featuredPostDeleted()
     {
-        return view('admin.pages.featured-post-deleted');
+        $featuredPosts = Post::where('is_active', true)->where('is_featured', true)->where('is_deleted', '!=', true)->with('type')->orderBy('created_at', 'DESC')->get();
+        $featuredPostDraft = Post::where('is_active', false)->where('is_featured', true)->where('is_deleted', '!=', true)->with('type')->orderBy('created_at', 'DESC')->get();
+        $featuredPostDeleted = Post::where('is_featured', true)->where('is_deleted', true)->with('type')->orderBy('created_at', 'DESC')->get();
+
+        $featuredPostCount = count($featuredPosts);
+        $featuredPostDraftCount = count($featuredPostDraft);
+        $featuredPostDeletedCount = count($featuredPostDeleted);
+
+        return view('admin.pages.featured-post-deleted', compact('featuredPostDeleted', 'featuredPostCount', 'featuredPostDraftCount', 'featuredPostDeletedCount'));
     }
 
     public function type()
